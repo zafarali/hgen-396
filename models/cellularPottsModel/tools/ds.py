@@ -23,3 +23,10 @@ class Lattice:
         pass
     
 
+class Cell:
+    cellType=0
+    cellState='q' #cellState = {q:quinsient, p:proliferating, m:migrating}
+    def __init__(self,cellType):
+        self.cellType = cellType
+    def __str__(self):
+        print 'Cell Type: ',self.cellType,', Cell State: ',self.cellState
