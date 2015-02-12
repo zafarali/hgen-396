@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+// Intro to Parallel Programming (Lesson 1)
+//
 //no return type means that we store all information into the pointers 
 __global__ void square(float *d_out, float *d_in) {
     //threadIdx is the index of the thread
