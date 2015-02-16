@@ -2,6 +2,7 @@ __author__ = 'zafarali'
 # Datastructure to help facillitate cellular potts
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 class Tools:
     @staticmethod
@@ -66,15 +67,15 @@ class Lattice:
             print i
             
             switch = i%4
-            scale = 
+            
             if switch == 1:
                 cellIndex[1] = cellIndex[1] - 1
             elif switch == 2:
-                cellIndex[0] = cellIndex[0]+1
+                cellIndex[0] = cellIndex[0] + 1
             elif switch == 3:
-                cellIndex[1] = cellIndex[1]+1
+                cellIndex[1] = cellIndex[1] + 1
             else:
-                cellIndex[0] = cellIndex[0]-1
+                cellIndex[0] = cellIndex[0] - 1
             
         
     def isPositionOccupied(self, x, y):
@@ -93,6 +94,13 @@ class Lattice:
                 return True
             else:
                 return False
+#    def visualize(self):
+#        heatmap, xedges, yedges = np.histogram2d(range(0,self.size), self.matrix[:][:], bins=50)
+#        extent = [xedges[0], xedges[-1], yedges[0], yedges[-1]]
+#
+#        plt.clf()
+#        plt.imshow(heatmap, extent=extent)
+#        plt.show()
 
 class Cell:
     cellType=0
