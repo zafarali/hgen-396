@@ -39,7 +39,7 @@ class Lattice:
         self.cellArea = cellArea
         self.numberOfCells = numberOfCells
         #code to initialize lattice here
-        
+        cycle = 1
         # we start from the middle of the lattice
         cellIndex = [self.size/2, self.size/2]
         for i in range(1,numberOfCells+1):
@@ -69,13 +69,15 @@ class Lattice:
             switch = i%4
             
             if switch == 1:
-                cellIndex[1] = cellIndex[1] - 1
+                cellIndex[1] = cellIndex[1] - (cycle * 2)
             elif switch == 2:
-                cellIndex[0] = cellIndex[0] + 1
+                cellIndex[0] = cellIndex[0] + (cycle * 2)
             elif switch == 3:
-                cellIndex[1] = cellIndex[1] + 1
+                cellIndex[1] = cellIndex[1] + (cycle * 2)
             else:
-                cellIndex[0] = cellIndex[0] - 1
+                cycle += 1
+                cellIndex[1] +=1
+                cellIndex[0] = cellIndex[0] - (cycle*2)
             
         
     def isPositionOccupied(self, x, y):
