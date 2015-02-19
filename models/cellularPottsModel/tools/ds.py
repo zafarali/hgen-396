@@ -20,13 +20,13 @@ class Lattice:
     DIMENSION = 2
     CELL_AREA_DEFAULT = 9
     
-    
+    definedInteractionStrengths = {'1,1':2, '1,2':11, '2,2':14, '2,0':16, '1,0':16}
     # attributes
     size = 0
     name = 'GenericLattice2D'
     
     
-    def __init__(self, size):
+    def __init__(self, size,):
         self.size = size
         #create the matrix of zeros (essentially a blank lattice
         
@@ -102,8 +102,18 @@ class Lattice:
         return [[x, y+1], [x+1, y], [x,y-1], [x-1,y], [x+1,y+1], [x-1,y+1], [x-1, y-1], [x+1,y-1]]
         
     def interactionStrength(self, cellA, cellB):
-        #determines the interaction strenght between two cells
-        pass
+        #determines the interaction strength between two cells
+        cellAType = str(cellA.getType())
+        cellBType = str(cellA.getType())
+        interaction_strength = 0
+        # following try catch allows us to key 1,2 or 2,1 
+        try:
+            interaction_strength = definedInteractionStrengths[cellAType+','+cellBType]
+        except NameError:
+            interaction_strength = definedInteractionStrengths[cellBType+','+cellAType]
+        else:
+            interaction_strength = 0
+        return interaction_strength
     def getCellAt(self, x, y):
         return self.cellList[self.matrix[x][y]]
 #    def visualize(self):
@@ -127,5 +137,5 @@ class Cell:
         return '( Type: ' + str(self.cellType) + ',  State: ' + str(self.cellState) + ',  Area: ' + str(self.cellArea) + ' )'
     def increaseArea(self, by=1):
         self.cellArea += by
-    def cellType(self):
+    def getType(self):
         return cellType
