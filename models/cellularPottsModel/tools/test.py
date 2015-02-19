@@ -17,3 +17,15 @@ print 'x.cellList=',x.cellList
 #print 'running probability with p=0.9'
 #for i in range(1,10):
 #    print str(ds.Tools.probability(0.9))
+
+
+#testing for cells.
+cell1 = ds.Cell(0)
+cell2 = ds.Cell(0)
+cell3 = ds.Cell(2)
+
+print 'the following should print the same thing on two lines:'
+print str(x.interactionStrength(cell1,cell3))
+print str(x.interactionStrength(cell3,cell1))
+print 'this should be different'
+print str(x.interactionStrength(cell1,cell2))

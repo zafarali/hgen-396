@@ -14,6 +14,12 @@ class Tools:
             return True
         else:
             return False
+    @staticmethod
+    def boltzmannProbability( deltaH, temp ):
+        if deltaH < 0:
+            return 1
+        else:
+            return np.exp(float(-deltaH/temp))
 
 class Lattice:
     # constants
@@ -81,7 +87,7 @@ class Lattice:
                 cellIndex[1] +=1
                 cellIndex[0] = cellIndex[0] - (cycle*2)
             
-        
+
     def isPositionOccupied(self, x, y):
         return bool(self.matrix[x][y])
     def setLatticePosition(self, x, y, value, override=0):
@@ -104,18 +110,39 @@ class Lattice:
     def interactionStrength(self, cellA, cellB):
         #determines the interaction strength between two cells
         cellAType = str(cellA.getType())
-        cellBType = str(cellA.getType())
+        cellBType = str(cellB.getType())
         interaction_strength = 0
         # following try catch allows us to key 1,2 or 2,1 
         try:
-            interaction_strength = definedInteractionStrengths[cellAType+','+cellBType]
-        except NameError:
-            interaction_strength = definedInteractionStrengths[cellBType+','+cellAType]
+            interaction_strength = self.definedInteractionStrengths[str(cellAType+','+cellBType)]
+        except KeyError:
+            interaction_strength = self.definedInteractionStrengths[str(cellBType+','+cellAType)]
         else:
             interaction_strength = 0
         return interaction_strength
     def getCellAt(self, x, y):
+        #returns the cell occupying lattice position x,y
         return self.cellList[self.matrix[x][y]]
+
+    def metropolis(self):
+        #executes one step of the metropolis algorithm
+
+        #choose a lattice site at random.
+
+        #get the cell and cell type
+
+        #pick a random value of spin from the range exhibited by the neighbours
+
+        # calculate H_initial
+
+        #calculate H_final
+
+        # deltaH = H_final - H_initial
+
+        #change the spin using special probability function.
+
+        pass
+        
 #    def visualize(self):
 #        heatmap, xedges, yedges = np.histogram2d(range(0,self.size), self.matrix[:][:], bins=50)
 #        extent = [xedges[0], xedges[-1], yedges[0], yedges[-1]]
@@ -138,4 +165,4 @@ class Cell:
     def increaseArea(self, by=1):
         self.cellArea += by
     def getType(self):
-        return cellType
+        return self.cellType
