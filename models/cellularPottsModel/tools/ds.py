@@ -128,11 +128,23 @@ class Lattice:
         #executes one step of the metropolis algorithm
 
         #choose a lattice site at random.
+        x = Tools.rndm(0, self.size)
+        y = Tools.rndm(0, self.size)
 
         #get the cell and cell type
 
+        selected_cell = Cell(0)
+        while !self.isPositionOccupied( x, y ):
+            x = Tools.rndm(0, self.size)
+            y = Tools.rndm(0, self.size)
+            selected_cell = self.getCellAt( x, y )
         #pick a random value of spin from the range exhibited by the neighbours
 
+        neighbours = self.getNeighbourIndices( x, y )
+        neighbourCells = []
+        for neighbour in neighbours:
+            neighbourCells.push( self.getCellAt( neighbour[0], neighbour[1] ) )
+        
         # calculate H_initial
 
         #calculate H_final
@@ -142,7 +154,7 @@ class Lattice:
         #change the spin using special probability function.
 
         pass
-        
+
 #    def visualize(self):
 #        heatmap, xedges, yedges = np.histogram2d(range(0,self.size), self.matrix[:][:], bins=50)
 #        extent = [xedges[0], xedges[-1], yedges[0], yedges[-1]]
