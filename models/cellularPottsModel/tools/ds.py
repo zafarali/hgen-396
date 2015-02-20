@@ -20,12 +20,19 @@ class Tools:
             return 1
         else:
             return np.exp(float(-deltaH/temp))
+    @staticmethod
+    def kdelta(a, b):
+        '''This is an implementation of the Kronecker Delta Function 
+        0 if a =/= b
+        1 if a = b'''
+        return 1 if a == b else 0
 
 class Lattice:
     # constants
     DIMENSION = 2
     CELL_AREA_DEFAULT = 9
-    
+    DEFAULT_TEMPERATURE = 5
+
     definedInteractionStrengths = {'1,1':2, '1,2':11, '2,2':14, '2,0':16, '1,0':16}
     # attributes
     size = 0
@@ -120,9 +127,23 @@ class Lattice:
         else:
             interaction_strength = 0
         return interaction_strength
+
     def getCellAt(self, x, y):
         #returns the cell occupying lattice position x,y
         return self.cellList[self.matrix[x][y]]
+    def getCellAt(self, spin):
+        #returns the cell with spin = spin
+        return self.cellList[spin]
+
+    def getSpinAt(self, x, y):
+        return self.matrix[x][y]
+
+    def calculateH(self, spin1, spint2):
+        #calculates the H between two spin cells.
+        if Tools.kdelta( spin1, spin2 ) != 1:
+            return self.interactionStrength( self.getCellAt( spin1 ), self.getCellAt( spin2 ) ) 
+        else:
+            return 0
 
     def metropolis(self):
         #executes one step of the metropolis algorithm
@@ -133,25 +154,42 @@ class Lattice:
 
         #get the cell and cell type
 
-        selected_cell = Cell(0)
-        while !self.isPositionOccupied( x, y ):
+        selected_cell = {}
+        while not self.isPositionOccupied( x, y ):
             x = Tools.rndm(0, self.size)
             y = Tools.rndm(0, self.size)
-            selected_cell = self.getCellAt( x, y )
+            selected_cell = {'Cell': self.getCellAt( x, y ), 'Spin': self.getSpinAt( x, y ) }
+
         #pick a random value of spin from the range exhibited by the neighbours
 
         neighbours = self.getNeighbourIndices( x, y )
         neighbourCells = []
+        neighbourCellSpins = []
+
         for neighbour in neighbours:
             neighbourCells.push( self.getCellAt( neighbour[0], neighbour[1] ) )
-        
-        # calculate H_initial
+            neighbourCellSpins.push( self.getSpinAt( neighbour[0], neighbour[1] ) )
+       
 
-        #calculate H_final
+        # calculate H_initial
+        currentSpin  = selected_cell['Spin']
+        H_intial = 0
+        for neighbourSpin in neighbourCellSpins:
+            H_intiial += self.calculateH( currentSpin, neighbourSpin )
+
+        # select a trial spin from neighbours
+        trialSpin = neighbourCellSpins[ Tools.rndm( 0, len(neighbourCellSpins)-1 ) ]
+
+        # calculate H_final
+        H_final = 0
+        for neighbourSpin in neighbourCellSpins:
+            H_final = H_final + self.calculateH( trialSpin, neighbourSpin )
 
         # deltaH = H_final - H_initial
+        deltaH = H_final - H_initial
 
-        #change the spin using special probability function.
+        #change the spin using special probability function. 
+        spinTrue = Tools.probability( Tools.boltzmannProbability( deltaH, self.DEFAULT_TEMPERATURE ) )
 
         pass
 
@@ -166,10 +204,11 @@ class Lattice:
 class Cell:
     cellType=0
     cellState='q' #cellState = {q:quinsient, p:proliferating, m:migrating}
-    
-    def __init__(self,cellType):
+    cellSpin = 0
+    def __init__(self, cellType , cellSpin  = 0):
         self.cellType = cellType
         self.cellArea = 0
+        self.cellSpin = cellSpin
     def __str__(self):
         return ' Type: ' + str(self.cellType) + ', State: ' + str(self.cellState)
     def __repr__(self):
