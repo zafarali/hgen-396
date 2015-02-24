@@ -52,7 +52,7 @@ class Lattice:
         
         # code to initialize cell list
         self.cellList = [Cell(1) for i in range(1,numberOfCells+2)]
-        
+        self.cellList[0] = Cell(0)
         
         #code to initialize lattice here
         cycle = 1
@@ -204,6 +204,17 @@ class Lattice:
 #        plt.clf()
 #        plt.imshow(heatmap, extent=extent)
 #        plt.show()
+    
+
+    #### TRYING TO VISUALIZE THE CELL TYPES ####
+    def getCellTypeForSpin(self,x):
+        x = int(x)
+        cell = self.getCellAt(x)
+        return cell.getType()
+
+    def visualizeTypes(self):
+        f = np.vectorize(self.getCellTypeForSpin)
+        print f(self.matrix)
 
 class Cell:
     cellType=0
