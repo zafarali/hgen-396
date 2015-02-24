@@ -5,9 +5,10 @@ __author__ = 'zafarali'
 
 import ds
 
-x = ds.Lattice(14)
+x = ds.Lattice(10)
 print 'x.size=',x.size
-x.initialize(11, 2)
+#initialize with 1 cell
+x.initialize(1)
 print 'x.matrix=',x.matrix
 print 'x.cellList=',x.cellList
 #print str(ds.Tools.rndm(5,10))
@@ -20,8 +21,8 @@ print 'x.cellList=',x.cellList
 
 
 #testing for cells.
-cell1 = ds.Cell(0)
-cell2 = ds.Cell(0)
+cell1 = ds.Cell(1)
+cell2 = ds.Cell(1)
 cell3 = ds.Cell(2)
 
 print 'the following should print the same thing on two lines:'

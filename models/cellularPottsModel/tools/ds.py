@@ -191,7 +191,11 @@ class Lattice:
         #change the spin using special probability function. 
         spinTrue = Tools.probability( Tools.boltzmannProbability( deltaH, self.DEFAULT_TEMPERATURE ) )
 
-        pass
+        if spinTrue:
+            self.setLatticePosition(x,y,trialSpin,True)
+            selected_cell['Cell'].increaseArea()
+
+        selected_cell['Cell'].evolve()
 
 #    def visualize(self):
 #        heatmap, xedges, yedges = np.histogram2d(range(0,self.size), self.matrix[:][:], bins=50)
@@ -217,3 +221,7 @@ class Cell:
         self.cellArea += by
     def getType(self):
         return self.cellType
+    def evolve(self):
+        #this determines if the cell divides, grows or dies
+        # does the cell become cancerous?
+        pass
