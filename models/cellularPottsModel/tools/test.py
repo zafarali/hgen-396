@@ -8,11 +8,11 @@ import ds
 x = ds.Lattice(10)
 print 'x.size=',x.size
 #initialize with 1 cell
-x.initialize(5)
+x.initialize(1)
 print 'x.matrix=',x.matrix
-print 'x.visualizeTypes()='
-x.visualizeTypes()
-print 'x.cellList=',x.cellList
+print 'running simulation for 3 MCS'
+x.runSimulation(3)
+print 'x.matrix=',x.matrix
 #print str(ds.Tools.rndm(5,10))
 #print 'running probability with p=0.25'
 #for i in range(1,10):

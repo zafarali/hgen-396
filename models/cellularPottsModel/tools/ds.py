@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 class Tools:
     @staticmethod
     def rndm( l, r ):
-        return round((r-l)*np.random.random() +l)
+        return int(round((r-l)*np.random.random() +l))
     @staticmethod
     def probability( threshold ):
         if (np.random.random() <= threshold) or threshold is 1:
@@ -79,7 +79,7 @@ class Lattice:
             else:
                 i -= 1
             # update coordinates for next location
-            print i
+            # print i
             
             switch = i%4
             
@@ -102,10 +102,12 @@ class Lattice:
         # returns true if position was not occupied and it was updated
         # returns false if the position was occupied and it was not updated
         # override is a boolean that allows us to update even though position is occupied
-        print x,y,self.size
+        # print x,y,self.size
         if x < self.size and y < self.size:
             if (override == True) or (not self.isPositionOccupied(x,y)):
                 self.matrix[x][y] = value
+                if isinstance(value, np.float64):
+                    value = value.astype(int)
                 self.cellList[value].increaseArea()
                 return True
             else:
@@ -130,35 +132,46 @@ class Lattice:
 
     def getCellAt(self, x, y):
         #returns the cell occupying lattice position x,y
-        return self.cellList[self.matrix[x][y]]
-    def getCellAt(self, spin):
+        x = int(x)
+        y = int(y)        
+        return self.cellList[self.matrix[x][y].astype(int)]
+
+    def getCellWithSpin(self, spin):
         #returns the cell with spin = spin
-        return self.cellList[spin]
+
+        return self.cellList[spin.astype(int)]
 
     def getSpinAt(self, x, y):
+        x = int(x)
+        y = int(y)
         return self.matrix[x][y]
 
-    def calculateH(self, spin1, spint2):
+    def calculateH(self, spin1, spin2):
         #calculates the H between two spin cells.
         if Tools.kdelta( spin1, spin2 ) != 1:
-            return self.interactionStrength( self.getCellAt( spin1 ), self.getCellAt( spin2 ) ) 
+            return self.interactionStrength( self.getCellWithSpin( spin1 ), self.getCellWithSpin( spin2 ) ) 
         else:
             return 0
 
     def metropolis(self):
-        #executes one step of the metropolis algorithm
+        #executes one spin copy attempt
 
         #choose a lattice site at random.
-        x = Tools.rndm(0, self.size)
-        y = Tools.rndm(0, self.size)
+        x = Tools.rndm(0, self.size-1)
+        y = Tools.rndm(0, self.size-1)
 
         #get the cell and cell type
 
         selected_cell = {}
+        
         while not self.isPositionOccupied( x, y ):
-            x = Tools.rndm(0, self.size)
-            y = Tools.rndm(0, self.size)
-            selected_cell = {'Cell': self.getCellAt( x, y ), 'Spin': self.getSpinAt( x, y ) }
+            x = Tools.rndm(0, self.size-1)
+            y = Tools.rndm(0, self.size-1)
+
+        print 'selected x,y: ',x,y
+
+        selected_cell = {'Cell': self.getCellAt(x, y), \
+                        'Spin': self.getSpinAt( x, y ) }
 
         #pick a random value of spin from the range exhibited by the neighbours
 
@@ -167,30 +180,35 @@ class Lattice:
         neighbourCellSpins = []
 
         for neighbour in neighbours:
-            neighbourCells.push( self.getCellAt( neighbour[0], neighbour[1] ) )
-            neighbourCellSpins.push( self.getSpinAt( neighbour[0], neighbour[1] ) )
-       
+            if self.getSpinAt(neighbour[0], neighbour[1]).astype(int) != 0:
+                neighbourCells.append( self.getCellAt( neighbour[0], neighbour[1] ) )
+                neighbourCellSpins.append( self.getSpinAt( neighbour[0], neighbour[1] ) )
+        
+        print '#neighbours:',len(neighbourCells)
 
         # calculate H_initial
         currentSpin  = selected_cell['Spin']
-        H_intial = 0
+        H_initial = 0
         for neighbourSpin in neighbourCellSpins:
-            H_intiial += self.calculateH( currentSpin, neighbourSpin )
+            H_initial += self.calculateH( currentSpin, neighbourSpin )
 
+        print 'H_initial:',H_initial
         # select a trial spin from neighbours
         trialSpin = neighbourCellSpins[ Tools.rndm( 0, len(neighbourCellSpins)-1 ) ]
-
+        print 'Trial spin:',trialSpin
         # calculate H_final
         H_final = 0
         for neighbourSpin in neighbourCellSpins:
             H_final = H_final + self.calculateH( trialSpin, neighbourSpin )
 
+        print 'H_final',H_final
+
         # deltaH = H_final - H_initial
         deltaH = H_final - H_initial
-
+        print 'deltaH',deltaH
         #change the spin using special probability function. 
         spinTrue = Tools.probability( Tools.boltzmannProbability( deltaH, self.DEFAULT_TEMPERATURE ) )
-
+        print 'spinTrue:',spinTrue
         if spinTrue:
             self.setLatticePosition(x,y,trialSpin,True)
             selected_cell['Cell'].increaseArea()
@@ -205,16 +223,22 @@ class Lattice:
 #        plt.imshow(heatmap, extent=extent)
 #        plt.show()
     
+    def runSimulation(self, MCS):
+        # 1 Monte Carlo Time Step = N Spin copy attempts
+        for i in range(0, MCS * self.size):
+            self.metropolis()
 
     #### TRYING TO VISUALIZE THE CELL TYPES ####
     def getCellTypeForSpin(self,x):
         x = int(x)
-        cell = self.getCellAt(x)
+        cell = self.getCellWithSpin(x)
         return cell.getType()
 
     def visualizeTypes(self):
         f = np.vectorize(self.getCellTypeForSpin)
         print f(self.matrix)
+
+
 
 class Cell:
     cellType=0
@@ -236,3 +260,4 @@ class Cell:
         #this determines if the cell divides, grows or dies
         # does the cell become cancerous?
         pass
+
