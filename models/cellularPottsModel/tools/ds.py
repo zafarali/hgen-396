@@ -26,6 +26,10 @@ class Tools:
         0 if a =/= b
         1 if a = b'''
         return 1 if a == b else 0
+    @staticmethod
+    def isEdgeCase(x, y, mn, mx):
+        # checks if x or y are outside the bounds of mn and mx.
+        return (x >= mx) or (x <= mn) or (y >= mx) or (y <= mn)
 
 class Lattice:
     # constants
@@ -44,6 +48,10 @@ class Lattice:
         #create the matrix of zeros (essentially a blank lattice
         
         self.matrix = np.zeros((size,size))
+
+    def isEdgeCase(self, x,y):
+        return Tools.isEdgeCase(x,y,0,self.size-1)
+
     def giveName(self, name):
         self.name = name
     def initialize(self, numberOfCells, cellArea=CELL_AREA_DEFAULT):
@@ -97,12 +105,13 @@ class Lattice:
 
     def isPositionOccupied(self, x, y):
         return bool(self.matrix[x][y])
-    def setLatticePosition(self, x, y, value, override=0):
+    def setLatticePosition(self, x, y, value, override=False):
         # Sets a lattice position (x,y) to value = value
         # returns true if position was not occupied and it was updated
         # returns false if the position was occupied and it was not updated
         # override is a boolean that allows us to update even though position is occupied
         # print x,y,self.size
+
         if x < self.size and y < self.size:
             if (override == True) or (not self.isPositionOccupied(x,y)):
                 self.matrix[x][y] = value
@@ -114,6 +123,7 @@ class Lattice:
                 return False
     def getNeighbourIndices(self, x, y):
         # returns the moore neighbourhood around x and y
+        # WARN: this doesn't check for edge cases...
         return [[x, y+1], [x+1, y], [x,y-1], [x-1,y], [x+1,y+1], [x-1,y+1], [x-1, y-1], [x+1,y-1]]
         
     def interactionStrength(self, cellA, cellB):
@@ -164,9 +174,9 @@ class Lattice:
 
         selected_cell = {}
         
-        while not self.isPositionOccupied( x, y ):
-            x = Tools.rndm(0, self.size-1)
-            y = Tools.rndm(0, self.size-1)
+        # while not self.isPositionOccupied( x, y ):
+        #     x = Tools.rndm(0, self.size-1)
+        #     y = Tools.rndm(0, self.size-1)
 
         print 'selected x,y: ',x,y
 
@@ -180,11 +190,15 @@ class Lattice:
         neighbourCellSpins = []
 
         for neighbour in neighbours:
-            if self.getSpinAt(neighbour[0], neighbour[1]).astype(int) != 0:
-                neighbourCells.append( self.getCellAt( neighbour[0], neighbour[1] ) )
-                neighbourCellSpins.append( self.getSpinAt( neighbour[0], neighbour[1] ) )
+            if not self.isEdgeCase(neighbour[0], neighbour[1]):
+                if self.getSpinAt(neighbour[0], neighbour[1]).astype(int) != 0:
+                    neighbourCells.append( self.getCellAt( neighbour[0], neighbour[1] ) )
+                    neighbourCellSpins.append( self.getSpinAt( neighbour[0], neighbour[1] ) )
         
         print '#neighbours:',len(neighbourCells)
+        
+        if len(neighbourCells) == 0:
+            return
 
         # calculate H_initial
         currentSpin  = selected_cell['Spin']
@@ -211,7 +225,6 @@ class Lattice:
         print 'spinTrue:',spinTrue
         if spinTrue:
             self.setLatticePosition(x,y,trialSpin,True)
-            selected_cell['Cell'].increaseArea()
 
         selected_cell['Cell'].evolve()
 
