@@ -43,7 +43,7 @@ class Lattice:
     name = 'GenericLattice2D'
     
     
-    def __init__(self, size,):
+    def __init__(self, size):
         self.size = size
         #create the matrix of zeros (essentially a blank lattice
         
@@ -51,6 +51,12 @@ class Lattice:
 
     def isEdgeCase(self, x,y):
         return Tools.isEdgeCase(x,y,0,self.size-1)
+
+    def deepCopy(self):
+        copy = Lattice(self.size)
+        copy.initialize(self.numberOfCells, self.cellArea)
+        copy.matrix = np.copy(self.matrix)
+        return copy
 
     def giveName(self, name):
         self.name = name
@@ -121,11 +127,15 @@ class Lattice:
                 return True
             else:
                 return False
-    def getNeighbourIndices(self, x, y):
+    def getNeighbourIndices(self, x, y, method='moore'):
         # returns the moore neighbourhood around x and y
         # WARN: this doesn't check for edge cases...
-        return [[x, y+1], [x+1, y], [x,y-1], [x-1,y], [x+1,y+1], [x-1,y+1], [x-1, y-1], [x+1,y-1]]
-        
+        if method is 'neumann':
+            return [[x, y-1], [x, y+1], [x+1, y], [x-1, y]]
+        else:
+            return [[x, y+1], [x+1, y], [x,y-1], [x-1,y], [x+1,y+1], [x-1,y+1], [x-1, y-1], [x+1,y-1]]
+
+
     def interactionStrength(self, cellA, cellB):
         #determines the interaction strength between two cells
         cellAType = str(cellA.getType())
@@ -163,7 +173,7 @@ class Lattice:
         else:
             return 0
 
-    def metropolis(self):
+    def metropolis(self, method='moore'):
         #executes one spin copy attempt
 
         #choose a lattice site at random.
@@ -178,14 +188,14 @@ class Lattice:
         #     x = Tools.rndm(0, self.size-1)
         #     y = Tools.rndm(0, self.size-1)
 
-        print 'selected x,y: ',x,y
+        # print 'selected x,y: ',x,y
 
         selected_cell = {'Cell': self.getCellAt(x, y), \
                         'Spin': self.getSpinAt( x, y ) }
 
         #pick a random value of spin from the range exhibited by the neighbours
 
-        neighbours = self.getNeighbourIndices( x, y )
+        neighbours = self.getNeighbourIndices( x, y , method)
         neighbourCells = []
         neighbourCellSpins = []
 
@@ -195,7 +205,7 @@ class Lattice:
                     neighbourCells.append( self.getCellAt( neighbour[0], neighbour[1] ) )
                     neighbourCellSpins.append( self.getSpinAt( neighbour[0], neighbour[1] ) )
         
-        print '#neighbours:',len(neighbourCells)
+        # print '#neighbours:',len(neighbourCells)
         
         if len(neighbourCells) == 0:
             return
@@ -206,23 +216,24 @@ class Lattice:
         for neighbourSpin in neighbourCellSpins:
             H_initial += self.calculateH( currentSpin, neighbourSpin )
 
-        print 'H_initial:',H_initial
+        # print 'H_initial:',H_initial
         # select a trial spin from neighbours
         trialSpin = neighbourCellSpins[ Tools.rndm( 0, len(neighbourCellSpins)-1 ) ]
-        print 'Trial spin:',trialSpin
+        
+        # print 'Trial spin:',trialSpin
         # calculate H_final
         H_final = 0
         for neighbourSpin in neighbourCellSpins:
             H_final = H_final + self.calculateH( trialSpin, neighbourSpin )
 
-        print 'H_final',H_final
+        # print 'H_final',H_final
 
         # deltaH = H_final - H_initial
         deltaH = H_final - H_initial
-        print 'deltaH',deltaH
+        # print 'deltaH',deltaH
         #change the spin using special probability function. 
         spinTrue = Tools.probability( Tools.boltzmannProbability( deltaH, self.DEFAULT_TEMPERATURE ) )
-        print 'spinTrue:',spinTrue
+        # print 'spinTrue:',spinTrue
         if spinTrue:
             self.setLatticePosition(x,y,trialSpin,True)
 
@@ -236,10 +247,10 @@ class Lattice:
 #        plt.imshow(heatmap, extent=extent)
 #        plt.show()
     
-    def runSimulation(self, MCS):
+    def runSimulation(self, MCS, method='moore'):
         # 1 Monte Carlo Time Step = N Spin copy attempts
         for i in range(0, MCS * self.size):
-            self.metropolis()
+            self.metropolis(method)
 
     #### TRYING TO VISUALIZE THE CELL TYPES ####
     def getCellTypeForSpin(self,x):
