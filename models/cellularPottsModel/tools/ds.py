@@ -18,11 +18,16 @@ class Lattice:
     name = 'GenericLattice2D'
     
     
-    def __init__(self, size, energyFunction):
+    # size = size of lattice
+    # energyFunction associated with this lattice
+    # specialObjects are special locations on the lattice which are occupied with objects
+
+    def __init__(self, size, energyFunction, specialObjects = {}):
         self.size = size
         #create the matrix of zeros (essentially a blank lattice
         self.energyFunction = energyFunction
         self.matrix = np.zeros((size,size))
+        self.specialObjects = specialObjects
 
     def isEdgeCase(self, x,y):
         return Tools.isEdgeCase(x,y,0,self.size-1)
@@ -167,9 +172,18 @@ class Lattice:
         # calculate H_initial
         currentCell  = selected_cell['Cell']
 
+
+        #special options dict
+        options = { 
+            'x': x, 
+            'y': y, 
+            'neighbours': len(neighbourCells),
+            'specialObjects': self.specialObjects 
+        }
+
         H_initial = 0
         for neighbourCell in neighbourCells:
-            H_initial += self.energyFunction.calculateH( currentCell, neighbourCell )
+            H_initial += self.energyFunction.calculateH( currentCell, neighbourCell, options )
 
         # print 'H_initial:',H_initial
         # select a trial spin from neighbours

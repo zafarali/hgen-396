@@ -7,18 +7,32 @@ class EnergyFunction:
 	#energies is a dictionary of (key, value) pairs where key = energy, 
 	#value = pair of cell types
 
-	def __init__( self, energies ):
+	# specialFunctions is a list of extra energy functions.
+
+	def __init__( self, energies , specialFunctions = None):
 		self.energies = {}
 		for energy, typePair in energies.items():
 			x, y = typePair
 			index = ''.join([str( x ) , ',' , str( y )])
 			self.energies[ index ] = float(energy)
 
-	def calculateH( self, cell1, cell2 ):
+		self.specialFunctions = specialFunctions
+
+	def calculateH( self, cell1, cell2, otherOptions = {} ):
     #calculates the H between two spin cells.
 
 		if Tools.kdelta( cell1.getSpin(), cell2.getSpin() ) != 1:
-			return self.determineInteractionStrength( cell1, cell2 ) 
+			interactionStrength = self.determineInteractionStrength( cell1, cell2 ) 
+			
+			extraEnergies = 0
+			
+			## execute custom functions.
+			if self.specialFunctions:
+				for _, extraEnergyFn in self.specialFunctions.items():
+					extraEnergies = extraEnergies + extraEnergyFn( cell1, cell2, otherOptions )
+
+			#return total energies
+			return interactionStrength + extraEnergies
 		else:
 			return 0
 
