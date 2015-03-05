@@ -19,19 +19,19 @@ energies = {
 	'16': (1,0)
 }
 efunc = EnergyFunction(energies)
-x = ds.Lattice(10, efunc)
+x = ds.Lattice(20, efunc)
 # print 'x.size=',x.size
 #initialize with 1 cell
-x.initialize(4)
+x.initialize(10)
 
 print 'x.matrix=',x.matrix
 
 # prior = Heatmap(z=x.matrix.tolist())
-
+x.visualize()
 x.runSimulation(20, 'neumann')
 print 'running simulation with 20 MCS'
 print 'x.matrix=',x.matrix
-
+x.visualize(hold=True)
 
 # moore = Heatmap(
 # 	z=x.matrix.tolist(),

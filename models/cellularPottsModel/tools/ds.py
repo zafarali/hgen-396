@@ -87,7 +87,12 @@ class Lattice:
                 cycle += 1
                 cellIndex[1] +=1
                 cellIndex[0] = cellIndex[0] - (cycle*2)
-            
+        
+        # for visualizing the matrix 
+        self.imageRep = plt.imshow(self.matrix, interpolation='nearest')
+        plt.colorbar(orientation='vertical')
+        plt.draw()
+
 
     def isPositionOccupied(self, x, y):
         return bool(self.matrix[x][y])
@@ -206,6 +211,7 @@ class Lattice:
 
         if spinTrue:
             self.setLatticePosition(x,y, trialNeighbour.getSpin() ,True)
+            self.visualize()
 
         selected_cell['Cell'].evolve()
 
@@ -228,9 +234,12 @@ class Lattice:
         cell = self.getCellWithSpin(x)
         return cell.getType()
 
-    def visualizeTypes(self):
-        f = np.vectorize(self.getCellTypeForSpin)
-        print f(self.matrix)
+    def visualize(self, hold=False):
+        self.imageRep.set_data(self.matrix)
+        if not hold:
+            plt.draw()
+            plt.pause(0.01)
+        else:
+            plt.show()
 
-
-
+        
