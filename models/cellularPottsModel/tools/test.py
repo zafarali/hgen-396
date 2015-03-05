@@ -9,23 +9,27 @@ __author__ = 'zafarali'
 # import plotly.tools as pltls
 
 import ds
+from EnergyFunction import EnergyFunction
 
-x = ds.Lattice(20)
+energies = {
+	'2': (1,1),
+	'11': (1,2),
+	'14': (2,2),
+	'16': (2,0),
+	'16': (1,0)
+}
+efunc = EnergyFunction(energies)
+x = ds.Lattice(20, efunc)
 # print 'x.size=',x.size
 #initialize with 1 cell
 
 x.initialize(4)
-y = x.deepCopy()
 print 'x.matrix=',x.matrix
-print 'y.matrix=',y.matrix
 
 # prior = Heatmap(z=x.matrix.tolist())
 
-print 'running simulation for 3 MCS using moore'
-x.runSimulation(20)
-y.runSimulation(20, 'neumann')
+x.runSimulation(20, 'neumann')
 print 'x.matrix=',x.matrix
-print 'y.matrix=',y.matrix
 
 
 # moore = Heatmap(
@@ -63,9 +67,14 @@ cell1 = ds.Cell(1)
 cell2 = ds.Cell(1)
 cell3 = ds.Cell(2)
 
+a = cell1.getSpin()
+b = cell2.getSpin()
+c = cell3.getSpin()
+
+
 print 'the following should print the same thing on two lines:'
-print str(x.interactionStrength(cell1,cell3))
-print str(x.interactionStrength(cell3,cell1))
+print str(x.energyFunction.determineInteractionStrength(a, c))
+print str(x.energyFunction.determineInteractionStrength(c, a))
 print 'this should be different'
-print str(x.interactionStrength(cell1,cell2))
+print str(x.energyFunction.determineInteractionStrength( a,b ))
 

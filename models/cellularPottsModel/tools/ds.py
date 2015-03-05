@@ -1,35 +1,11 @@
 __author__ = 'zafarali'
+__version__ = '0.0.1'
 # Datastructure to help facillitate cellular potts
 
 import numpy as np
 import matplotlib.pyplot as plt
-
-class Tools:
-    @staticmethod
-    def rndm( l, r ):
-        return int(round((r-l)*np.random.random() +l))
-    @staticmethod
-    def probability( threshold ):
-        if (np.random.random() <= threshold) or threshold is 1:
-            return True
-        else:
-            return False
-    @staticmethod
-    def boltzmannProbability( deltaH, temp ):
-        if deltaH < 0:
-            return 1
-        else:
-            return np.exp(float(-deltaH/temp))
-    @staticmethod
-    def kdelta(a, b):
-        '''This is an implementation of the Kronecker Delta Function 
-        0 if a =/= b
-        1 if a = b'''
-        return 1 if a == b else 0
-    @staticmethod
-    def isEdgeCase(x, y, mn, mx):
-        # checks if x or y are outside the bounds of mn and mx.
-        return (x >= mx) or (x <= mn) or (y >= mx) or (y <= mn)
+from Cell import Cell
+from Tools import Tools
 
 class Lattice:
     # constants
@@ -37,16 +13,15 @@ class Lattice:
     CELL_AREA_DEFAULT = 9
     DEFAULT_TEMPERATURE = 5
 
-    definedInteractionStrengths = {'1,1':2, '1,2':11, '2,2':14, '2,0':16, '1,0':16}
     # attributes
     size = 0
     name = 'GenericLattice2D'
     
     
-    def __init__(self, size):
+    def __init__(self, size, energyFunction):
         self.size = size
         #create the matrix of zeros (essentially a blank lattice
-        
+        self.energyFunction = energyFunction
         self.matrix = np.zeros((size,size))
 
     def isEdgeCase(self, x,y):
@@ -135,21 +110,6 @@ class Lattice:
         else:
             return [[x, y+1], [x+1, y], [x,y-1], [x-1,y], [x+1,y+1], [x-1,y+1], [x-1, y-1], [x+1,y-1]]
 
-
-    def interactionStrength(self, cellA, cellB):
-        #determines the interaction strength between two cells
-        cellAType = str(cellA.getType())
-        cellBType = str(cellB.getType())
-        interaction_strength = 0
-        # following try catch allows us to key 1,2 or 2,1 
-        try:
-            interaction_strength = self.definedInteractionStrengths[str(cellAType+','+cellBType)]
-        except KeyError:
-            interaction_strength = self.definedInteractionStrengths[str(cellBType+','+cellAType)]
-        else:
-            interaction_strength = 0
-        return interaction_strength
-
     def getCellAt(self, x, y):
         #returns the cell occupying lattice position x,y
         x = int(x)
@@ -165,13 +125,6 @@ class Lattice:
         x = int(x)
         y = int(y)
         return self.matrix[x][y]
-
-    def calculateH(self, spin1, spin2):
-        #calculates the H between two spin cells.
-        if Tools.kdelta( spin1, spin2 ) != 1:
-            return self.interactionStrength( self.getCellWithSpin( spin1 ), self.getCellWithSpin( spin2 ) ) 
-        else:
-            return 0
 
     def metropolis(self, method='moore'):
         #executes one spin copy attempt
@@ -214,7 +167,7 @@ class Lattice:
         currentSpin  = selected_cell['Spin']
         H_initial = 0
         for neighbourSpin in neighbourCellSpins:
-            H_initial += self.calculateH( currentSpin, neighbourSpin )
+            H_initial += self.energyFunction.calculateH( currentSpin, neighbourSpin )
 
         # print 'H_initial:',H_initial
         # select a trial spin from neighbours
@@ -224,7 +177,7 @@ class Lattice:
         # calculate H_final
         H_final = 0
         for neighbourSpin in neighbourCellSpins:
-            H_final = H_final + self.calculateH( trialSpin, neighbourSpin )
+            H_final = H_final + self.energyFunction.calculateH( trialSpin, neighbourSpin )
 
         # print 'H_final',H_final
 
@@ -263,25 +216,4 @@ class Lattice:
         print f(self.matrix)
 
 
-
-class Cell:
-    cellType=0
-    cellState='q' #cellState = {q:quinsient, p:proliferating, m:migrating}
-    cellSpin = 0
-    def __init__(self, cellType , cellSpin  = 0):
-        self.cellType = cellType
-        self.cellArea = 0
-        self.cellSpin = cellSpin
-    def __str__(self):
-        return ' Type: ' + str(self.cellType) + ', State: ' + str(self.cellState)
-    def __repr__(self):
-        return '( Type: ' + str(self.cellType) + ',  State: ' + str(self.cellState) + ',  Area: ' + str(self.cellArea) + ' )'
-    def increaseArea(self, by=1):
-        self.cellArea += by
-    def getType(self):
-        return self.cellType
-    def evolve(self):
-        #this determines if the cell divides, grows or dies
-        # does the cell become cancerous?
-        pass
 
