@@ -136,7 +136,7 @@ class Lattice:
         y = int(y)
         return self.matrix[x][y]
 
-    def metropolis(self, method='moore'):
+    def metropolis(self, method='moore', showVisualization=False):
         #executes one spin copy attempt
 
         #choose a lattice site at random.
@@ -211,22 +211,16 @@ class Lattice:
 
         if spinTrue:
             self.setLatticePosition(x,y, trialNeighbour.getSpin() ,True)
-            self.visualize()
+            if showVisualization:
+                self.visualize()
 
         selected_cell['Cell'].evolve()
 
-#    def visualize(self):
-#        heatmap, xedges, yedges = np.histogram2d(range(0,self.size), self.matrix[:][:], bins=50)
-#        extent = [xedges[0], xedges[-1], yedges[0], yedges[-1]]
-#
-#        plt.clf()
-#        plt.imshow(heatmap, extent=extent)
-#        plt.show()
     
-    def runSimulation(self, MCS, method='moore'):
+    def runSimulation(self, MCS, method='moore', showVisualization=False):
         # 1 Monte Carlo Time Step = N Spin copy attempts
         for i in range(0, MCS * self.size):
-            self.metropolis(method)
+            self.metropolis(method=method, showVisualization=showVisualization)
 
     #### TRYING TO VISUALIZE THE CELL TYPES ####
     def getCellTypeForSpin(self,x):
