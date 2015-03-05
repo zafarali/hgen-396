@@ -40,7 +40,7 @@ class Lattice:
         self.numberOfCells = numberOfCells
         
         # code to initialize cell list
-        self.cellList = [Cell(1) for i in range(1,numberOfCells+2)]
+        self.cellList = [Cell(1, i-1) for i in range(1,numberOfCells+2)]
         self.cellList[0] = Cell(0)
         
         #code to initialize lattice here
@@ -146,17 +146,18 @@ class Lattice:
         selected_cell = {'Cell': self.getCellAt(x, y), \
                         'Spin': self.getSpinAt( x, y ) }
 
+
         #pick a random value of spin from the range exhibited by the neighbours
 
         neighbours = self.getNeighbourIndices( x, y , method)
         neighbourCells = []
-        neighbourCellSpins = []
 
         for neighbour in neighbours:
+            # we first make sure we are not over reaching the board
             if not self.isEdgeCase(neighbour[0], neighbour[1]):
+                # now we check that we haven't selected a extra cellular position
                 if self.getSpinAt(neighbour[0], neighbour[1]).astype(int) != 0:
                     neighbourCells.append( self.getCellAt( neighbour[0], neighbour[1] ) )
-                    neighbourCellSpins.append( self.getSpinAt( neighbour[0], neighbour[1] ) )
         
         # print '#neighbours:',len(neighbourCells)
         
@@ -164,20 +165,21 @@ class Lattice:
             return
 
         # calculate H_initial
-        currentSpin  = selected_cell['Spin']
+        currentCell  = selected_cell['Cell']
+
         H_initial = 0
-        for neighbourSpin in neighbourCellSpins:
-            H_initial += self.energyFunction.calculateH( currentSpin, neighbourSpin )
+        for neighbourCell in neighbourCells:
+            H_initial += self.energyFunction.calculateH( currentCell, neighbourCell )
 
         # print 'H_initial:',H_initial
         # select a trial spin from neighbours
-        trialSpin = neighbourCellSpins[ Tools.rndm( 0, len(neighbourCellSpins)-1 ) ]
+        trialNeighbour = neighbourCells[ Tools.rndm( 0, len(neighbourCells)-1 ) ]
         
         # print 'Trial spin:',trialSpin
         # calculate H_final
         H_final = 0
-        for neighbourSpin in neighbourCellSpins:
-            H_final = H_final + self.energyFunction.calculateH( trialSpin, neighbourSpin )
+        for neighbourCell in neighbourCells:
+            H_final = H_final + self.energyFunction.calculateH( trialNeighbour, neighbourCell )
 
         # print 'H_final',H_final
 
@@ -187,8 +189,9 @@ class Lattice:
         #change the spin using special probability function. 
         spinTrue = Tools.probability( Tools.boltzmannProbability( deltaH, self.DEFAULT_TEMPERATURE ) )
         # print 'spinTrue:',spinTrue
+
         if spinTrue:
-            self.setLatticePosition(x,y,trialSpin,True)
+            self.setLatticePosition(x,y, trialNeighbour.getSpin() ,True)
 
         selected_cell['Cell'].evolve()
 

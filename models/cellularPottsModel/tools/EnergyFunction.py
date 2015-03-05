@@ -25,7 +25,6 @@ class EnergyFunction:
 	def determineInteractionStrength( self, cell1, cell2 ):
 
 		# following try catch allows us to key 1,2 or 2,1 
-
 		indexTest = ''.join([str( cell1.getType() ), ',' , str( cell2.getType() )])
 		
 		strength = self.energies.get( indexTest , 'tryagain' )

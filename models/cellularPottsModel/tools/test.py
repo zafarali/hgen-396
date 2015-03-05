@@ -19,16 +19,17 @@ energies = {
 	'16': (1,0)
 }
 efunc = EnergyFunction(energies)
-x = ds.Lattice(20, efunc)
+x = ds.Lattice(10, efunc)
 # print 'x.size=',x.size
 #initialize with 1 cell
-
 x.initialize(4)
+
 print 'x.matrix=',x.matrix
 
 # prior = Heatmap(z=x.matrix.tolist())
 
 x.runSimulation(20, 'neumann')
+print 'running simulation with 20 MCS'
 print 'x.matrix=',x.matrix
 
 
@@ -67,14 +68,10 @@ cell1 = ds.Cell(1)
 cell2 = ds.Cell(1)
 cell3 = ds.Cell(2)
 
-a = cell1.getSpin()
-b = cell2.getSpin()
-c = cell3.getSpin()
-
 
 print 'the following should print the same thing on two lines:'
-print str(x.energyFunction.determineInteractionStrength(a, c))
-print str(x.energyFunction.determineInteractionStrength(c, a))
+print str(x.energyFunction.determineInteractionStrength(cell1, cell3))
+print str(x.energyFunction.determineInteractionStrength(cell3, cell1))
 print 'this should be different'
-print str(x.energyFunction.determineInteractionStrength( a,b ))
+print str(x.energyFunction.determineInteractionStrength( cell1, cell2 ))
 

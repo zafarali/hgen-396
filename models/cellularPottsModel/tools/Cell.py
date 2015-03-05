@@ -7,9 +7,9 @@ class Cell:
         self.cellArea = 0
         self.cellSpin = cellSpin
     def __str__(self):
-        return ' Type: ' + str(self.cellType) + ', State: ' + str(self.cellState)
+        return '( Type: ' + str(self.cellType) + ',  State: ' + str(self.cellState) + ',  Area: ' + str(self.cellArea) + ', Spin: ' + str(self.cellSpin) + ' )'
     def __repr__(self):
-        return '( Type: ' + str(self.cellType) + ',  State: ' + str(self.cellState) + ',  Area: ' + str(self.cellArea) + ' )'
+        return '( Type: ' + str(self.cellType) + ',  State: ' + str(self.cellState) + ',  Area: ' + str(self.cellArea) + ', Spin: ' + str(self.cellSpin) + ' )'
     def increaseArea(self, by=1):
         self.cellArea += by
     def getType(self):
