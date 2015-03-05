@@ -11,26 +11,29 @@ class EnergyFunction:
 		self.energies = {}
 		for energy, typePair in energies.items():
 			x, y = typePair
-			self.energies[ (str( x ) , ',' , str( y )) ] = float(energy)
+			index = ''.join([str( x ) , ',' , str( y )])
+			self.energies[ index ] = float(energy)
 
-
-	def calculateH( self, type1, type2 ):
+	def calculateH( self, cell1, cell2 ):
     #calculates the H between two spin cells.
-		if Tools.kdelta( spin1, spin2 ) != 1:
-			return self.determineInteractionStrength( type1, type2 ) 
+
+		if Tools.kdelta( cell1.getSpin(), cell2.getSpin() ) != 1:
+			return self.determineInteractionStrength( cell1, cell2 ) 
 		else:
 			return 0
 
-	def determineInteractionStrength( self, type1, type2 ):
+	def determineInteractionStrength( self, cell1, cell2 ):
 
 		# following try catch allows us to key 1,2 or 2,1 
 
-		indexTest = ''.join([str( type1 ), ',' , str( type2 )])
-		strength = self.energies.get( indexTest , 'tryagain' )
-		print indexTest, str(strength)
-		if strength is 'tryagain':
-			strength = self.energies.get( ( str( type1 ) , ',' , str( type2 ) ), 'tryagain' )
+		indexTest = ''.join([str( cell1.getType() ), ',' , str( cell2.getType() )])
 		
+		strength = self.energies.get( indexTest , 'tryagain' )
+
+		if strength is 'tryagain':
+			indexTest = ''.join([str( cell2.getType() ), ',' , str( cell1.getType() )])
+			strength = self.energies.get( indexTest, 'tryagain' )
+
 		if strength is 'tryagain':
 			return 0
 		else:
