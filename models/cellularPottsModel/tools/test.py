@@ -8,7 +8,7 @@ __author__ = 'zafarali'
 # from plotly.graph_objs import *
 # import plotly.tools as pltls
 
-import ds
+from CellularPottsModel import CellularPottsModel
 from EnergyFunction import EnergyFunction
 
 energies = {
@@ -18,19 +18,21 @@ energies = {
 	'16': (2,0),
 	'16': (1,0)
 }
+
+
 efunc = EnergyFunction(energies)
-x = ds.Lattice(20, efunc)
+x = CellularPottsModel(50, efunc)
 # print 'x.size=',x.size
 #initialize with 1 cell
-x.initialize(10)
+x.initialize(25)
 
-print 'x.matrix=',x.matrix
+# print 'x.matrix=',x.matrix
 
 # prior = Heatmap(z=x.matrix.tolist())
 x.visualize()
-x.runSimulation(20, 'neumann')
+x.runSimulation(500, 'neumann', showVisualization=True)
 print 'running simulation with 20 MCS'
-print 'x.matrix=',x.matrix
+# print 'x.matrix=',x.matrix
 x.visualize(hold=True)
 
 # moore = Heatmap(
