@@ -37,9 +37,7 @@ class CellularPottsModel(Lattice):
         for neighbour in neighbours:
             # we first make sure we are not over reaching the board
             if not self.isEdgeCase(neighbour[0], neighbour[1]):
-                # now we check that we haven't selected a extra cellular position
-                if self.getSpinAt(neighbour[0], neighbour[1]).astype(int) != 0:
-                    neighbourCells.append( self.getCellAt( neighbour[0], neighbour[1] ) )
+                neighbourCells.append( self.getCellAt( neighbour[0], neighbour[1] ) )
         
         # print '#neighbours:',len(neighbourCells)
         
@@ -49,14 +47,18 @@ class CellularPottsModel(Lattice):
         # calculate H_initial
         currentCell  = selected_cell['Cell']
 
-
+        
         #special options dict
         options = { 
             'x': x, 
             'y': y, 
             'neighbours': len(neighbourCells),
             'specialObjects': self.specialObjects,
-            'maxCellArea': self.cellArea 
+            'cellList': self.cellList,
+            'numberOfCells': self.numberOfCells,
+            # the list comprehension below generates a list of celltarget areas
+            # where the index corresponds to the spin and the value corresponds to the cell target
+            'cellTargetAreaList': [ self.cellTargetAreaList[ (str(self.getCellWithSpin(i).getType())) ] for i in range(0, self.numberOfCells) ]
         }
 
         H_initial = 0
@@ -71,7 +73,7 @@ class CellularPottsModel(Lattice):
         # calculate H_final
         H_final = 0
         for neighbourCell in neighbourCells:
-            H_final = H_final + self.energyFunction.calculateH( trialNeighbour, neighbourCell )
+            H_final = H_final + self.energyFunction.calculateH( trialNeighbour, neighbourCell, options )
 
         # print 'H_final',H_final
 
@@ -86,7 +88,7 @@ class CellularPottsModel(Lattice):
             self.setLatticePosition(x,y, trialNeighbour.getSpin() ,True)
             if showVisualization:
                 self.visualize()
-
+        print spinTrue
         selected_cell['Cell'].evolve()
 
     

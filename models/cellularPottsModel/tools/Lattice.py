@@ -13,6 +13,8 @@ class Lattice:
     CELL_AREA_DEFAULT = 9
     DEFAULT_TEMPERATURE = 5
 
+
+
     # attributes
     size = 0
     name = 'GenericLattice2D'
@@ -40,8 +42,8 @@ class Lattice:
 
     def giveName(self, name):
         self.name = name
-    def initialize(self, numberOfCells, cellArea=CELL_AREA_DEFAULT):
-        self.cellArea = cellArea
+    def initialize(self, numberOfCells, cellTargetAreaList={'0': -1, '1': CELL_AREA_DEFAULT}):
+        self.cellTargetAreaList = cellTargetAreaList
         self.numberOfCells = numberOfCells
         
         # code to initialize cell list
@@ -128,8 +130,7 @@ class Lattice:
 
     def getCellWithSpin(self, spin):
         #returns the cell with spin = spin
-
-        return self.cellList[spin.astype(int)]
+        return self.cellList[spin.astype(int) if isinstance(spin, np.float64) else spin]
 
     def getSpinAt(self, x, y):
         x = int(x)

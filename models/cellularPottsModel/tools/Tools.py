@@ -25,3 +25,9 @@ class Tools:
     def isEdgeCase(x, y, mn, mx):
         # checks if x or y are outside the bounds of mn and mx.
         return (x >= mx) or (x <= mn) or (y >= mx) or (y <= mn)
+    @staticmethod
+    def thetaFunction( x ):
+        if x < 0:
+            return 0
+        else:
+            return 1

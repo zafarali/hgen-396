@@ -10,28 +10,35 @@ __author__ = 'zafarali'
 
 from CellularPottsModel import CellularPottsModel
 from EnergyFunction import EnergyFunction
+from Cell import Cell
+from CustomEnergyFunctions import CustomEnergyFunctions
+
 
 energies = {
-	'2': (1,1),
-	'11': (1,2),
+	'4': (1,1),
+	'10': (1,2),
 	'14': (2,2),
 	'16': (2,0),
-	'16': (1,0)
+	'50': (1,0)
 }
 
+specialFunctions = {
+	'AreaConstraint': CustomEnergyFunctions.AreaConstraint		
+}
 
-efunc = EnergyFunction(energies)
-x = CellularPottsModel(50, efunc)
+efunc = EnergyFunction(energies, specialFunctions)
+
+x = CellularPottsModel(10, efunc)
 # print 'x.size=',x.size
 #initialize with 1 cell
-x.initialize(25)
+x.initialize(4)
 
 # print 'x.matrix=',x.matrix
 
 # prior = Heatmap(z=x.matrix.tolist())
 x.visualize()
-x.runSimulation(500, 'neumann', showVisualization=True)
-print 'running simulation with 20 MCS'
+print 'running simulation with 50 MCS (neumann neighbourhood function)'
+x.runSimulation(50, 'neumann', showVisualization=True)
 # print 'x.matrix=',x.matrix
 x.visualize(hold=True)
 
@@ -66,9 +73,9 @@ x.visualize(hold=True)
 
 
 #testing for cells.
-cell1 = ds.Cell(1)
-cell2 = ds.Cell(1)
-cell3 = ds.Cell(2)
+cell1 = Cell(1)
+cell2 = Cell(1)
+cell3 = Cell(2)
 
 
 print 'the following should print the same thing on two lines:'
