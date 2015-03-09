@@ -1,7 +1,7 @@
 from Tools import Tools
 class Cell:
     DEFAULT_INFORMATION = {
-        'mutationRate': 0.1 
+        'mutationRate': 0.01 
     }
     
     START_STATE = 'q' #cellState = {q:quinsient, p:proliferating, m:migrating}
@@ -29,10 +29,20 @@ class Cell:
         return self.cellArea
     def isDead( self ):
         return self.cellArea == 0
-    def evolve( self, information=DEFAULT_INFORMATION ):
+
+    def evolve( self, information=DEFAULT_INFORMATION, gradients=[]):
         #this determines if the cell divides, grows or dies
         # does the cell become cancerous?
-        # Tools.poissonProbability(information['mutationRate'])
+        if self.cellType != 2 and self.cellSpin != 0:
+            mutates = Tools.probability(Tools.poissonProbability(information['mutationRate']))
+            if mutates:
+                self.cellType = 2
+                print self,'mutated'
 
+        for gradient in gradients:
+            self.interactWithGradient(gradient)
+
+        self.cellTimer += 1
+
+    def interactWithGradient(self, gradient):
         pass
-

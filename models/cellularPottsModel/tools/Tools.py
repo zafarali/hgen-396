@@ -31,6 +31,6 @@ class Tools:
             return 0
         else:
             return 1
-    # @staticmethod
-    # def poissonProbability(lamb):
-    #     return np.random.possion(lamb)
+    @staticmethod
+    def poissonProbability(lamb):
+        return np.random.poisson(lamb)

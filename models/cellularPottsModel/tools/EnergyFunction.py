@@ -18,21 +18,27 @@ class EnergyFunction:
 
 		self.specialFunctions = specialFunctions
 
-	def calculateH( self, cell1, cell2, otherOptions = {} ):
-    #calculates the H between two spin cells.
-
+	def pairWiseEnergy( self, cell1, cell2 ):
 		if Tools.kdelta( cell1.getSpin(), cell2.getSpin() ) != 1:
-			interactionStrength = self.determineInteractionStrength( cell1, cell2 ) 
-			
-			extraEnergies = 0
-			
-			## execute custom functions.
-			if self.specialFunctions:
-				for _, extraEnergyFn in self.specialFunctions.items():
-					extraEnergies = extraEnergies + extraEnergyFn( cell1, cell2, otherOptions )
+			return self.determineInteractionStrength( cell1, cell2 ) 
+		return 0
+	
+	def calculateH( self, cell, neighbours, otherOptions = {} ):
+  	#calculates the H between current cell and neighbours
+		neighbourInteractionStrength = 0
 
-			#return total energies
-			return interactionStrength + extraEnergies
+		for neighbour in neighbours:
+			neighbourInteractionStrength += self.pairWiseEnergy(cell, neighbour)
+
+		extraEnergies = 0
+		
+		## execute custom functions.
+		if self.specialFunctions:
+			for _, extraEnergyFn in self.specialFunctions.items():
+				extraEnergies = extraEnergies + extraEnergyFn( cell, Cell(0), otherOptions )
+
+		#return total energies
+			return neighbourInteractionStrength + extraEnergies
 		else:
 			return 0
 

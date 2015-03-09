@@ -11,7 +11,7 @@ class Lattice:
     # constants
     DIMENSION = 2
     CELL_AREA_DEFAULT = 6
-    DEFAULT_TEMPERATURE = 298
+    DEFAULT_TEMPERATURE = 10
 
 
 
@@ -48,7 +48,7 @@ class Lattice:
 
     def giveName(self, name):
         self.name = name
-    def initialize(self, numberOfCells, cellTargetAreaList={'0': -1, '1': CELL_AREA_DEFAULT}):
+    def initialize(self, numberOfCells, cellTargetAreaList={'0': -1, '1': CELL_AREA_DEFAULT, '2': CELL_AREA_DEFAULT}):
         self.cellTargetAreaList = cellTargetAreaList
         self.numberOfCells = numberOfCells
         

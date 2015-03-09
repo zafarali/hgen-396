@@ -48,6 +48,12 @@ class CellularPottsModel(Lattice):
         if len(neighbourCells) == 0:
             return
 
+        
+        neighbourTypes = [neighbour.getType() for neighbour in neighbourCells]
+        
+        if sum(neighbourTypes) == 0:
+            return
+
         # calculate H_initial
         currentCell  = selected_cell['Cell']
 
@@ -66,8 +72,8 @@ class CellularPottsModel(Lattice):
         }
 
         H_initial = 0
-        for neighbourCell in neighbourCells:
-            H_initial += self.energyFunction.calculateH( currentCell, neighbourCell, options )
+        
+        H_initial = self.energyFunction.calculateH( currentCell, neighbourCells, options )
 
         # print 'H_initial:',H_initial
         # select a trial spin from neighbours
@@ -76,8 +82,7 @@ class CellularPottsModel(Lattice):
         # print 'Trial spin:',trialSpin
         # calculate H_final
         H_final = 0
-        for neighbourCell in neighbourCells:
-            H_final = H_final + self.energyFunction.calculateH( trialNeighbour, neighbourCell, options )
+        H_final = self.energyFunction.calculateH( trialNeighbour, neighbourCells, options )
 
         # print 'H_final',H_final
 

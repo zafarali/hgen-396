@@ -15,11 +15,11 @@ from CustomEnergyFunctions import CustomEnergyFunctions
 
 
 energies = {
-	'4': (1,1),
-	'10': (1,2),
+	'2': (1,1),
+	'11': (1,2),
 	'14': (2,2),
 	'16': (2,0),
-	'-2': (1,0)
+	'16': (1,0)
 }
 
 specialFunctions = {
@@ -28,10 +28,10 @@ specialFunctions = {
 
 efunc = EnergyFunction(energies, specialFunctions)
 
-x = CellularPottsModel(10, efunc)
+x = CellularPottsModel(20, efunc)
 # print 'x.size=',x.size
 #initialize with 1 cell
-x.initialize(4)
+x.initialize(10)
 
 # print 'x.matrix=',x.matrix
 
@@ -40,6 +40,7 @@ x.visualize()
 print 'running simulation with 40 MCS (neumann neighbourhood function)'
 x.runSimulation(40, 'neumann', showVisualization=True)
 print 'simulation over'
+print x.cellList
 # print 'x.matrix=',x.matrix
 x.visualize(hold=True)
 
