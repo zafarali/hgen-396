@@ -19,7 +19,7 @@ energies = {
 	'10': (1,2),
 	'14': (2,2),
 	'16': (2,0),
-	'50': (1,0)
+	'-2': (1,0)
 }
 
 specialFunctions = {
@@ -37,8 +37,9 @@ x.initialize(4)
 
 # prior = Heatmap(z=x.matrix.tolist())
 x.visualize()
-print 'running simulation with 50 MCS (neumann neighbourhood function)'
-x.runSimulation(50, 'neumann', showVisualization=True)
+print 'running simulation with 40 MCS (neumann neighbourhood function)'
+x.runSimulation(40, 'neumann', showVisualization=True)
+print 'simulation over'
 # print 'x.matrix=',x.matrix
 x.visualize(hold=True)
 

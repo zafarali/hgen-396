@@ -10,8 +10,8 @@ from Tools import Tools
 class Lattice:
     # constants
     DIMENSION = 2
-    CELL_AREA_DEFAULT = 9
-    DEFAULT_TEMPERATURE = 5
+    CELL_AREA_DEFAULT = 6
+    DEFAULT_TEMPERATURE = 298
 
 
 
@@ -39,6 +39,12 @@ class Lattice:
         copy.initialize(self.numberOfCells, self.cellArea)
         copy.matrix = np.copy(self.matrix)
         return copy
+
+    def allCellsDead(self):
+        cellsDead = [cell.isDead() for cell in self.cellList]
+        print cellsDead
+        # returns true if all values in cellAlive are 1.
+        return sum(cellsDead) == (self.numberOfCells - 1)
 
     def giveName(self, name):
         self.name = name
@@ -98,22 +104,27 @@ class Lattice:
 
     def isPositionOccupied(self, x, y):
         return bool(self.matrix[x][y])
+
     def setLatticePosition(self, x, y, value, override=False):
         # Sets a lattice position (x,y) to value = value
         # returns true if position was not occupied and it was updated
         # returns false if the position was occupied and it was not updated
         # override is a boolean that allows us to update even though position is occupied
         # print x,y,self.size
-
+        oldValue = self.matrix[x][y]
         if x < self.size and y < self.size:
             if (override == True) or (not self.isPositionOccupied(x,y)):
                 self.matrix[x][y] = value
                 if isinstance(value, np.float64):
                     value = value.astype(int)
+
+                oldValue = oldValue.astype(int)
                 self.cellList[value].increaseArea()
+                self.cellList[oldValue].decreaseArea()
                 return True
             else:
                 return False
+
     def getNeighbourIndices(self, x, y, method='moore'):
         # returns the moore neighbourhood around x and y
         # WARN: this doesn't check for edge cases...
@@ -136,7 +147,6 @@ class Lattice:
         x = int(x)
         y = int(y)
         return self.matrix[x][y]
-
 
     #### TRYING TO VISUALIZE THE CELL TYPES ####
     def getCellTypeForSpin(self,x):

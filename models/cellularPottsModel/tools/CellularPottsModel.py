@@ -9,6 +9,10 @@ class CellularPottsModel(Lattice):
         Lattice.__init__(self, size, energyFunction, specialObjects)
 
     def metropolis(self, method='moore', showVisualization=False):
+
+        if self.allCellsDead():
+            return 'ALLCELLSDEAD'
+
         #executes one spin copy attempt
 
         #choose a lattice site at random.
@@ -95,4 +99,4 @@ class CellularPottsModel(Lattice):
     def runSimulation(self, MCS, method='moore', showVisualization=False):
         # 1 Monte Carlo Time Step = N Spin copy attempts
         for i in range(0, MCS * self.size):
-            self.metropolis(method=method, showVisualization=showVisualization)
+            if self.metropolis(method=method, showVisualization=showVisualization) is 'ALLCELLSDEAD': break
