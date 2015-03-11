@@ -30,17 +30,19 @@ class EnergyFunction:
 		for neighbour in neighbours:
 			neighbourInteractionStrength += self.pairWiseEnergy(cell, neighbour)
 
+		print 'H_neighbours=',str(neighbourInteractionStrength)
 		extraEnergies = 0
 		
 		## execute custom functions.
 		if self.specialFunctions:
 			for _, extraEnergyFn in self.specialFunctions.items():
-				extraEnergies = extraEnergies + extraEnergyFn( cell, Cell(0), otherOptions )
+				newEnergyTerm = extraEnergyFn( cell, otherOptions )
+				extraEnergies = extraEnergies + newEnergyTerm
+				print 'H_',str(extraEnergyFn),'=',str(newEnergyTerm)
 
 		#return total energies
-			return neighbourInteractionStrength + extraEnergies
-		else:
-			return 0
+		return neighbourInteractionStrength + extraEnergies
+
 
 	def determineInteractionStrength( self, cell1, cell2 ):
 

@@ -11,9 +11,7 @@ class Lattice:
     # constants
     DIMENSION = 2
     CELL_AREA_DEFAULT = 6
-    DEFAULT_TEMPERATURE = 1
-
-
+    DEFAULT_TEMPERATURE = 10
 
     # attributes
     size = 0
@@ -42,12 +40,10 @@ class Lattice:
 
     def allCellsDead(self):
         cellsDead = [cell.isDead() for cell in self.cellList]
-        print cellsDead
+        # print cellsDead
         # returns true if all values in cellAlive are 1.
-        return sum(cellsDead) == (self.numberOfCells - 1)
+        return sum(cellsDead) >= self.numberOfCells 
 
-    def giveName(self, name):
-        self.name = name
     def initialize(self, numberOfCells, cellTargetAreaList={'0': -1, '1': CELL_AREA_DEFAULT, '2': CELL_AREA_DEFAULT}):
         self.cellTargetAreaList = cellTargetAreaList
         self.numberOfCells = numberOfCells

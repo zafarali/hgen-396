@@ -42,16 +42,16 @@ class CellularPottsModel(Lattice):
             # we first make sure we are not over reaching the board
             if not self.isEdgeCase(neighbour[0], neighbour[1]):
                 neighbourCells.append( self.getCellAt( neighbour[0], neighbour[1] ) )
-        
+            else:
+                neighbours.remove(neighbour)
         # print '#neighbours:',len(neighbourCells)
         
         if len(neighbourCells) == 0:
             return
 
         
-        neighbourTypes = [neighbour.getType() for neighbour in neighbourCells]
-        
-        if sum(neighbourTypes) == 0:
+        # checks if all neighbours are 0 and you too are 0, this means that you should skip this turn
+        if sum([neighbour.getType() for neighbour in neighbourCells]) == 0 and selected_cell['Cell'].getType() == 0:
             return
 
         # calculate H_initial
@@ -68,22 +68,25 @@ class CellularPottsModel(Lattice):
             'numberOfCells': self.numberOfCells,
             # the list comprehension below generates a list of celltarget areas
             # where the index corresponds to the spin and the value corresponds to the cell target
-            'cellTargetAreaList': [ self.cellTargetAreaList[ (str(self.getCellWithSpin(i).getType())) ] for i in range(0, self.numberOfCells) ]
+            'cellTargetAreaList': [ self.cellTargetAreaList[ (str(self.getCellWithSpin(i).getType())) ] for i in range(0, self.numberOfCells+1) ]
         }
 
         H_initial = 0
         
         H_initial = self.energyFunction.calculateH( currentCell, neighbourCells, options )
-
+        print 'H_initial=',H_initial
         # print 'H_initial:',H_initial
         # select a trial spin from neighbours
-        trialNeighbour = neighbourCells[ Tools.rndm( 0, len(neighbourCells)-1 ) ]
+        randomIndex = Tools.rndm( 0, len(neighbourCells)-1 )
+        trialNeighbour = neighbourCells[randomIndex]
         
         # print 'Trial spin:',trialSpin
+
+        options['x'] = neighbours[randomIndex][0]
         # calculate H_final
         H_final = 0
         H_final = self.energyFunction.calculateH( trialNeighbour, neighbourCells, options )
-
+        print 'H_final=',H_final
         # print 'H_final',H_final
 
         # deltaH = H_final - H_initial

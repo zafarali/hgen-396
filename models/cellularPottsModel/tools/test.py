@@ -12,7 +12,7 @@ from CellularPottsModel import CellularPottsModel
 from EnergyFunction import EnergyFunction
 from Cell import Cell
 from CustomEnergyFunctions import CustomEnergyFunctions
-
+from Gradient import Gradient
 
 energies = {
 	'2': (1,1),
@@ -23,22 +23,25 @@ energies = {
 }
 
 specialFunctions = {
-	'AreaConstraint': CustomEnergyFunctions.AreaConstraint		
+	'AreaConstraint': CustomEnergyFunctions.AreaConstraint,
+	'OxygenGradientInteract': CustomEnergyFunctions.OxygenGradientInteract	
 }
-
+specialObjects = {
+	'OxygenGradient': Gradient(lambda x: -x*x , 10, interactionStrength=50, interactionType=-1)
+}
 efunc = EnergyFunction(energies, specialFunctions)
 
-x = CellularPottsModel(20, efunc)
+x = CellularPottsModel(10, efunc, specialObjects=specialObjects)
 # print 'x.size=',x.size
 #initialize with 1 cell
-x.initialize(10)
+x.initialize(1)
 
 # print 'x.matrix=',x.matrix
 
 # prior = Heatmap(z=x.matrix.tolist())
 x.visualize()
 print 'running simulation with 40 MCS (neumann neighbourhood function)'
-x.runSimulation(40, 'neumann', showVisualization=True)
+x.runSimulation(3000, 'neumann', showVisualization=True)
 print 'simulation over'
 print x.cellList
 # print 'x.matrix=',x.matrix
