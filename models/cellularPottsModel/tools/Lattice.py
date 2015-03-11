@@ -11,7 +11,7 @@ class Lattice:
     # constants
     DIMENSION = 2
     CELL_AREA_DEFAULT = 6
-    DEFAULT_TEMPERATURE = 10
+    DEFAULT_TEMPERATURE = 1
 
 
 
@@ -111,8 +111,8 @@ class Lattice:
         # returns false if the position was occupied and it was not updated
         # override is a boolean that allows us to update even though position is occupied
         # print x,y,self.size
-        oldValue = self.matrix[x][y]
         if x < self.size and y < self.size:
+            oldValue = self.matrix[x][y]
             if (override == True) or (not self.isPositionOccupied(x,y)):
                 self.matrix[x][y] = value
                 if isinstance(value, np.float64):
