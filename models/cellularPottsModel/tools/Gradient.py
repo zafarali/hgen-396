@@ -13,7 +13,10 @@ class Gradient:
 		self.interactionType = interactionType
 
 	def interactionAt ( self, pos ):
-		return self.interactions[pos] * self.interactionStrength * self.interactionType
+		try:
+			return self.interactions[pos] * self.interactionStrength * self.interactionType
+		except IndexError:
+			return 0
 
 	def __repr__(self):
 		string = '[ %s ]' % str(self.interactions)
