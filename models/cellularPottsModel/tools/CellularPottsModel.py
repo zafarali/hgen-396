@@ -21,18 +21,33 @@ class CellularPottsModel(Lattice):
 
         s = 20  # average cell size
         side = Tools.sqrt( numberOfCells * s )
-        center = ( self.size/2, self.size/2 )
-        top = ( center[0] - side,  center[1] - side )
+        center = ( self.size/2.0, self.size/2.0 )
+        top = ( round(center[0] - side/2.0),  round(center[1] - side/2.0) )
 
         cellNumber = 1
         cycle = 1
-        for j in range(0, side ):
-            for i in range(0, side ):
-                self.setLatticePosition( j, i, cellNumber )
-                cycle = cycle + 1
-                if cycle > s:
-                    cycle = 1
-                    cellNumber = cellNumber + 1
+
+
+        index = [ int ( top[0] ) , int ( top[1] ) ]
+
+        while ( cellNumber < numberOfCells ):
+            if ( index[1] > int(top[1]) + int(side) ):
+                # reset the x index, increement the y index by 1
+                index[1] = int ( top[1]  )
+                index[0] = int ( top[0] + 2 )
+
+            self.setLatticePosition( index[0], index[1] , cellNumber )
+            self.setLatticePosition( index[0], index[1]+1 , cellNumber )
+            
+            #increment the x index
+            index[1] = index[1] + 1
+
+            # deal with cycles
+            cycle = cycle + 2
+            if cycle > s:
+                cycle = 1
+                cellNumber = cellNumber + 1
+
 
         #HOPE THIS WORKS??
         self.imageRep = plt.imshow(self.matrix, interpolation='nearest')
