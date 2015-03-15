@@ -2,11 +2,42 @@ from Lattice import Lattice
 from Cell import Cell
 from EnergyFunction import EnergyFunction
 from Tools import Tools
+import matplotlib.pyplot as plt
 
 
 class CellularPottsModel(Lattice):
+
+    CELL_AREA_DEFAULT = 40
+
     def __init__(self, size, energyFunction, specialObjects = {}):
         Lattice.__init__(self, size, energyFunction, specialObjects)
+
+    def initialize(self, numberOfCells, cellTargetAreaList={'0': -1, '1': CELL_AREA_DEFAULT, '2': CELL_AREA_DEFAULT}):
+        # number of cells must now be a square number
+        self.numberOfCells = numberOfCells
+        self.cellTargetAreaList = cellTargetAreaList       
+        self.cellList = [Cell(1, i-1) for i in range(1,numberOfCells+2)]
+        self.cellList[0] = Cell(0)
+
+        s = 20  # average cell size
+        side = Tools.sqrt( numberOfCells * s )
+        center = ( self.size/2, self.size/2 )
+        top = ( center[0] - side,  center[1] - side )
+
+        cellNumber = 1
+        cycle = 1
+        for j in range(0, side ):
+            for i in range(0, side ):
+                self.setLatticePosition( j, i, cellNumber )
+                cycle = cycle + 1
+                if cycle > s:
+                    cycle = 1
+                    cellNumber = cellNumber + 1
+
+        #HOPE THIS WORKS??
+        self.imageRep = plt.imshow(self.matrix, interpolation='nearest')
+        plt.colorbar(orientation='vertical')
+        plt.draw()
 
     def metropolis(self, method='moore', showVisualization=False):
 
@@ -81,8 +112,10 @@ class CellularPottsModel(Lattice):
         trialNeighbour = neighbourCells[randomIndex]
         
         # print 'Trial spin:',trialSpin
-
+        print 'x_initial=',options['x']
         options['x'] = neighbours[randomIndex][0]
+        options['y'] = neighbours[randomIndex][1]
+        print 'x_trial=',options['x']
         # calculate H_final
         H_final = 0
         H_final = self.energyFunction.calculateH( trialNeighbour, neighbourCells, options )
@@ -91,6 +124,7 @@ class CellularPottsModel(Lattice):
 
         # deltaH = H_final - H_initial
         deltaH = H_final - H_initial
+        print 'deltaH=',deltaH
         # print 'deltaH',deltaH
         #change the spin using special probability function. 
         spinTrue = Tools.probability( Tools.boltzmannProbability( deltaH, self.DEFAULT_TEMPERATURE ) )
