@@ -14,7 +14,12 @@ class Gradient:
 		try:
 			return self.interactions[pos] * self.interactionStrength
 		except IndexError:
-			return 0
+			if pos < 0:
+				return self.interactions[0]
+			elif pos > len(self.interactions:
+				return self.interactions[len(self.interactions)]
+			else:
+				return 0
 
 	def __repr__(self):
 		string = '[ %s ]' % str(self.interactions)
