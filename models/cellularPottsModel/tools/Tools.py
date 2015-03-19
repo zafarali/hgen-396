@@ -34,3 +34,6 @@ class Tools:
     @staticmethod
     def poissonProbability(lamb):
         return np.random.poisson(lamb)
+    @staticmethod
+    def sqrt( arg ):
+        return np.sqrt(arg).astype(int)
