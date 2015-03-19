@@ -3,7 +3,7 @@ from Cell import Cell
 from EnergyFunction import EnergyFunction
 from Tools import Tools
 import matplotlib.pyplot as plt
-
+import numpy as np
 
 class CellularPottsModel(Lattice):
 
@@ -20,7 +20,7 @@ class CellularPottsModel(Lattice):
         self.cellList[0] = Cell(0)
 
         s = 20  # average cell size
-        side = Tools.sqrt( numberOfCells * s )
+        side = np.sqrt( numberOfCells * s )
         center = ( self.size/2.0, self.size/2.0 )
         top = ( round(center[0] - side/2.0),  round(center[1] - side/2.0) )
 
@@ -62,8 +62,9 @@ class CellularPottsModel(Lattice):
         #executes one spin copy attempt
 
         #choose a lattice site at random.
-        x = Tools.rndm(0, self.size-1)
-        y = Tools.rndm(0, self.size-1)
+        x,y=np.random.randint(self.size,size=2)
+        #x = Tools.rndm(0, self.size-1)
+        #y = Tools.rndm(0, self.size-1)
 
         #get the cell and cell type
 
@@ -75,7 +76,7 @@ class CellularPottsModel(Lattice):
 
         # print 'selected x,y: ',x,y
 
-        selected_cell = {'Cell': self.getCellAt(x, y), \
+        selected_cell = {'Cell': self.getCellAt( x, y ), \
                         'Spin': self.getSpinAt( x, y ) }
 
 
@@ -117,7 +118,7 @@ class CellularPottsModel(Lattice):
             'cellTargetAreaList': [ self.cellTargetAreaList[ (str(self.getCellWithSpin(i).getType())) ] for i in range(0, self.numberOfCells+1) ]
         }
 
-        H_initial = 0
+
         
         H_initial = self.energyFunction.calculateH( currentCell, neighbourCells, options )
         print 'H_initial=',H_initial
