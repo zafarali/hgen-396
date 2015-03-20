@@ -10,16 +10,18 @@ class Cell:
     START_STATE = 'q' #cellState = {q:quinsient, p:proliferating, m:migrating}
     
 
-    def __init__( self, cellType , cellSpin  = 0 ):
+    def __init__( self, cellType , cellSpin  = 0, targetArea=0 ):
         self.cellTimer = 0
         self.cellState = self.START_STATE
         self.cellType = cellType
         self.cellArea = 0
         self.cellSpin = cellSpin
+        self.targetArea = targetArea
+
     def __str__( self ):
-        return '( Type: ' + str(self.cellType) + ',  State: ' + str(self.cellState) + ',  Area: ' + str(self.cellArea) + ', Spin: ' + str(self.cellSpin) + ' )'
+        return '( Type: ' + str(self.cellType) + ',  State: ' + str(self.cellState) + ',  Area: ' + str(self.cellArea) + ', Spin: ' + str(self.cellSpin) + ', Target Area = ' + str(self.targetArea) + ' )'
     def __repr__( self ):
-        return '( Type: ' + str(self.cellType) + ',  State: ' + str(self.cellState) + ',  Area: ' + str(self.cellArea) + ', Spin: ' + str(self.cellSpin) + ' )'
+        return '( Type: ' + str(self.cellType) + ',  State: ' + str(self.cellState) + ',  Area: ' + str(self.cellArea) + ', Spin: ' + str(self.cellSpin) + ', Target Area = ' + str(self.targetArea) + ' )'
     def increaseArea( self, by = 1 ):
         self.cellArea += by
     def decreaseArea( self, by = 1):
