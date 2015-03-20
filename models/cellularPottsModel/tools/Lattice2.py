@@ -11,7 +11,7 @@ class Lattice2:
 
 	DIMENSION = 2
 
-	def __init__( self, size, template = None, method = 'neumann'):
+	def __init__( self, size, method = 'neumann'):
 		self.size = size
 		self.matrix = [ [ Point( y, x, 0, size, method=method ) for y in range( 0, size ) ] for x in range( 0 , size ) ]
 
@@ -21,3 +21,5 @@ class Lattice2:
 	def setSpin ( self, x, y, newSpin ):
 		self.get( x, y ).setSpin( newSpin )
 
+	def useTemplate( self, template ):
+		pass

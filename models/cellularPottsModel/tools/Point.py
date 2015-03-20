@@ -50,7 +50,7 @@ class Point:
 		return str(self.coordinate) + ', spin=' +  str(self.spin)
 
 	def __str__ ( self ):
-		return self.coordinate + ', spin=' + str(self.spin)
+		return str(self.coordinate) + ', spin=' +  str(self.spin)
 
 	def setSpin( self, newSpin ):
 		self.spin = newSpin
