@@ -14,7 +14,7 @@ class Tools:
         if deltaH < 0:
             return 1
         else:
-            return np.exp(float(-deltaH/temp))
+            return np.exp(float(-deltaH)/temp)
     @staticmethod
     def kdelta(a, b):
         '''This is an implementation of the Kronecker Delta Function 
