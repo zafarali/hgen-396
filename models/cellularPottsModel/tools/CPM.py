@@ -10,6 +10,11 @@ This is the engine of the CPM, it contains all the data structures
 and algorithms needed to manipulate it.
 '''
 
+class CPM(Engine):
+	def __init__( self, **kwargs):
+		super().__init__( **kwargs )
+
+
 CELL_TARGET_AREA = 10
 
 class Engine:
