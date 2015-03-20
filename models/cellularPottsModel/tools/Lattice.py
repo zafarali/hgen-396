@@ -65,7 +65,7 @@ class Lattice:
                 self.setLatticePosition(cellIndex[0]-1,cellIndex[1],i) 
                 self.setLatticePosition(cellIndex[0]-1,cellIndex[1],i)
                 #update one lattice site outside the von neumann neighbourhood to be the same as the current cell
-                switch = Tools.rndm(1,4)
+                switch = np.random.random_integers(1,4)
                 if switch == 1:
                     self.setLatticePosition(cellIndex[0]+1,cellIndex[1]+1,i)
                 elif switch == 2:

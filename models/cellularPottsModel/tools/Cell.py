@@ -1,4 +1,7 @@
 from Tools import Tools
+import numpy as np
+
+
 class Cell:
     DEFAULT_INFORMATION = {
         'mutationRate': 0.01 
@@ -34,7 +37,7 @@ class Cell:
         #this determines if the cell divides, grows or dies
         # does the cell become cancerous?
         if self.cellType != 2 and self.cellSpin != 0:
-            mutates = Tools.probability(Tools.poissonProbability(information['mutationRate']))
+            mutates = np.random.binomial(1, Tools.poissonProbability(information['mutationRate']))
             if mutates:
                 self.cellType = 2
                 print self,'mutated'

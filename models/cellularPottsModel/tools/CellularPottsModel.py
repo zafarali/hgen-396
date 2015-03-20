@@ -125,7 +125,7 @@ class CellularPottsModel(Lattice):
         print 'H_initial=',H_initial
         # print 'H_initial:',H_initial
         # select a trial spin from neighbours
-        randomIndex = Tools.rndm( 0, len(neighbourCells)-1 )
+        randomIndex = np.random.randint(len(neighbourCells))
         trialNeighbour = neighbourCells[randomIndex]
         
         # print 'Trial spin:',trialSpin
@@ -144,7 +144,7 @@ class CellularPottsModel(Lattice):
         print 'deltaH=',deltaH
         # print 'deltaH',deltaH
         #change the spin using special probability function. 
-        spinTrue = Tools.probability( Tools.boltzmannProbability( deltaH, self.DEFAULT_TEMPERATURE ) )
+        spinTrue = np.random.binomial(1, Tools.boltzmannProbability( deltaH, self.DEFAULT_TEMPERATURE ) )
         # print 'spinTrue:',spinTrue
 
         if spinTrue:
