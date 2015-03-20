@@ -16,7 +16,7 @@ class Gradient:
 		except IndexError:
 			if pos < 0:
 				return self.interactions[0]
-			elif pos > len(self.interactions:
+			elif pos > len(self.interactions):
 				return self.interactions[len(self.interactions)]
 			else:
 				return 0
