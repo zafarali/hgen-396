@@ -37,7 +37,7 @@ class Point:
 			'moore' = returns moore neighbourhood (square)
 			'neumann' = returns neumann neighbourhood (diamond)
 	'''
-	def __init__( self , x , y , spin, size = 0, z = None, method = 'neumann' ):
+	def __init__( self , x , y , spin, size, z = None, method = 'neumann' ):
 		self.coordinate = ( x, y, z ) if z else ( x, y )
 		self.x = x
 		self.y = y
@@ -47,7 +47,11 @@ class Point:
 		self.neighbours = [ neighbour for neighbour in neighbours if not __EDGE__( neighbour[0], neighbour[1], size )]
 
 	def __repr__( self ):
-		return ''+self.coordinate+', spin='+self.spin
+		return str(self.coordinate) + ', spin=' +  str(self.spin)
 
 	def __str__ ( self ):
-		return ''+self.coordinate+', spin='+self.spin
+		return self.coordinate + ', spin=' + str(self.spin)
+
+	def setSpin( self, newSpin ):
+		self.spin = newSpin
+
