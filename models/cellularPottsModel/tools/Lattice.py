@@ -1,5 +1,5 @@
 __author__ = 'zafarali'
-__version__ = '0.0.1'
+__version__ = '0.0.2'
 # Datastructure to help facillitate cellular potts
 
 import numpy as np
@@ -145,9 +145,8 @@ class Lattice:
         return self.matrix[x][y]
 
     #### TRYING TO VISUALIZE THE CELL TYPES ####
-    def getCellTypeForSpin(self,x):
-        x = int(x)
-        cell = self.getCellWithSpin(x)
+    def getCellTypeForSpin(self,spin):
+        cell = self.getCellWithSpin(int(spin))
         return cell.getType()
 
     def visualize(self, hold=False):
