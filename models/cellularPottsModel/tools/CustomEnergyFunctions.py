@@ -34,8 +34,11 @@ class CustomEnergyFunctions:
 	@staticmethod
 	def OxygenGradientInteract( cell1, options ):
 		# total = 0
-		return options['specialObjects']['OxygenGradient'].interactionAt(options['x'])
+		return options['specialObjects']['OxygenGradient'].interactionAt(options['y'])
 
+	@staticmethod
+	def NutrientInteract( cell1, options ):
+		return options['specialObjects']['NutrientGradient'].interactionAt(options['y'])
 
 
 '''end'''

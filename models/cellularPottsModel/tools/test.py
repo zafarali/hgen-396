@@ -15,33 +15,35 @@ from CustomEnergyFunctions import CustomEnergyFunctions
 from Gradient import Gradient
 
 energies = {
-	'2': (1,1),
-	'11': (1,2),
-	'14': (2,2),
-	'16': (2,0),
-	'16': (1,0)
+	'1': (1,1),
+	'4': (1,2),
+	'8': (2,2),
+	'10': (2,0),
+	'10': (1,0)
 }
 
 specialFunctions = {
 	'AreaConstraint': CustomEnergyFunctions.AreaConstraint,
-	'OxygenGradientInteract': CustomEnergyFunctions.OxygenGradientInteract	
+	'OxygenGradientInteract': CustomEnergyFunctions.OxygenGradientInteract,	
+	'NutrientInteract': CustomEnergyFunctions.NutrientInteract
 }
 specialObjects = {
-	'OxygenGradient': Gradient(lambda x: -x*x , 10, interactionStrength=50, interactionType=-1)
+	'OxygenGradient': Gradient(lambda x: -x , 20, interactionStrength=500),
+	'NutrientGradient': Gradient(lambda x: -x + 20, 20, interactionStrength=1000)
 }
 efunc = EnergyFunction(energies, specialFunctions)
 
-x = CellularPottsModel(10, efunc, specialObjects=specialObjects)
+x = CellularPottsModel(20, efunc, specialObjects=specialObjects)
 # print 'x.size=',x.size
 #initialize with 1 cell
-x.initialize(1)
+x.initialize(10)
 
 # print 'x.matrix=',x.matrix
 
 # prior = Heatmap(z=x.matrix.tolist())
 x.visualize()
-print 'running simulation with 40 MCS (neumann neighbourhood function)'
-x.runSimulation(3000, 'neumann', showVisualization=True)
+print 'running simulation with 100 MCS (neumann neighbourhood function)'
+x.runSimulation(100, 'neumann', showVisualization=True)
 print 'simulation over'
 print x.cellList
 # print 'x.matrix=',x.matrix

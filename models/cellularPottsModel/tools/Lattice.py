@@ -10,8 +10,8 @@ from Tools import Tools
 class Lattice:
     # constants
     DIMENSION = 2
-    CELL_AREA_DEFAULT = 6
-    DEFAULT_TEMPERATURE = 10
+    CELL_AREA_DEFAULT = 20
+    DEFAULT_TEMPERATURE = 100
 
     # attributes
     size = 0
