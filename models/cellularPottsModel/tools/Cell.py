@@ -36,14 +36,14 @@ class Cell:
     def evolve( self, information=DEFAULT_INFORMATION, gradients=[]):
         #this determines if the cell divides, grows or dies
         # does the cell become cancerous?
-        if self.cellType != 2 and self.cellSpin != 0:
-            mutates = np.random.binomial(1, Tools.poissonProbability(information['mutationRate']))
-            if mutates:
-                self.cellType = 2
-                print self,'mutated'
+        #if self.cellType != 2 and self.cellSpin != 0:
+        #    mutates = np.random.binomial(1, Tools.poissonProbability(information['mutationRate']))
+        #    if mutates:
+        #        self.cellType = 2
+        #        print self,'mutated'
 
-        for gradient in gradients:
-            self.interactWithGradient(gradient)
+        #for gradient in gradients:
+        #    self.interactWithGradient(gradient)
 
         self.cellTimer += 1
 

@@ -19,9 +19,8 @@ class EnergyFunction:
 		self.specialFunctions = specialFunctions
 
 	def pairWiseEnergy( self, cell1, cell2 ):
-		if Tools.kdelta( cell1.getSpin(), cell2.getSpin() ) != 1:
-			return self.determineInteractionStrength( cell1, cell2 ) 
-		return 0
+		return self.determineInteractionStrength( cell1, cell2 ) if cell1.getSpin() == cell2.getSpin() else 0
+
 	
 	def calculateH( self, cell, neighbours, otherOptions = {} ):
   	#calculates the H between current cell and neighbours

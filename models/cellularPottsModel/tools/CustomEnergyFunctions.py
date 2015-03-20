@@ -19,8 +19,7 @@ class CustomEnergyFunctions:
 			targetArea = options['cellTargetAreaList'][i]
 
 			#calculate theta ahead to save computation time
-			theta = Tools.thetaFunction( targetArea )
-
+			theta = 0 if targetArea < 0 else 1
 			
 			if theta != 0 :
 				# the to be squared term
