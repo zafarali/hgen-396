@@ -15,21 +15,21 @@ from CustomEnergyFunctions import CustomEnergyFunctions
 from Gradient import Gradient
 
 energies = {
-	'1': (1,1),
-	'4': (1,2),
-	'8': (2,2),
-	'10': (2,0),
-	'10': (1,0)
+	'10': (1,1),
+	'-2': (1,2),
+	'30': (2,2),
+	'15': (2,0),
+	'15': (1,0)
 }
 
 specialFunctions = {
-	'AreaConstraint': CustomEnergyFunctions.AreaConstraint,
-	'OxygenGradientInteract': CustomEnergyFunctions.OxygenGradientInteract,	
-	'NutrientInteract': CustomEnergyFunctions.NutrientInteract
+	'AreaConstraint': CustomEnergyFunctions.AreaConstraint
+	# 'OxygenGradientInteract': CustomEnergyFunctions.OxygenGradientInteract,	
+	# 'NutrientInteract': CustomEnergyFunctions.NutrientInteract
 }
 specialObjects = {
-	'OxygenGradient': Gradient(lambda x: -x , 20, interactionStrength=500),
-	'NutrientGradient': Gradient(lambda x: -x + 20, 20, interactionStrength=1000)
+	# 'OxygenGradient': Gradient(lambda x: -x , 20, interactionStrength=500),
+	# 'NutrientGradient': Gradient(lambda x: -x + 20, 20, interactionStrength=1000)
 }
 efunc = EnergyFunction(energies, specialFunctions)
 
