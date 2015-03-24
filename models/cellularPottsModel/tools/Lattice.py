@@ -195,6 +195,7 @@ class Lattice:
             plt.draw()
             plt.pause(0.01)
         else:
+            plt.draw()
             plt.show()
 
         
