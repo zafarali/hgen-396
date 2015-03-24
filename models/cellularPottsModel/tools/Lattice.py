@@ -11,7 +11,7 @@ class Lattice:
     # constants
     DIMENSION = 2
     CELL_AREA_DEFAULT = 20
-    DEFAULT_TEMPERATURE = 100
+    DEFAULT_TEMPERATURE = 10
 
     # attributes
     size = 0
@@ -44,8 +44,10 @@ class Lattice:
         # returns true if all values in cellAlive are 1.
         return sum(cellsDead) >= self.numberOfCells 
 
-    def initialize(self, numberOfCells, cellTargetAreaList={'0': -1, '1': CELL_AREA_DEFAULT, '2': CELL_AREA_DEFAULT}):
-        self.cellTargetAreaList = cellTargetAreaList
+    def initialize(self, numberOfCells, **kwargs):
+        self.cellTargetAreaList = kwargs.get('cellTargetAreaList', {'0': -1, '1': self.CELL_AREA_DEFAULT, '2': self.CELL_AREA_DEFAULT})
+        method = kwargs.get('method', 'random')
+
         self.numberOfCells = numberOfCells
         
         # code to initialize cell list
@@ -56,42 +58,80 @@ class Lattice:
         cycle = 1
         # we start from the middle of the lattice
         cellIndex = [self.size/2, self.size/2]
-        for i in range(1,numberOfCells+1):
-            if(self.setLatticePosition(cellIndex[0], cellIndex[1], i)):
-                # set everything the the von neumann neighbourhood
-                # to the same cell type
-                self.setLatticePosition(cellIndex[0],cellIndex[1]-1,i)
-                self.setLatticePosition(cellIndex[0],cellIndex[1]+1,i)
-                self.setLatticePosition(cellIndex[0]-1,cellIndex[1],i) 
-                self.setLatticePosition(cellIndex[0]-1,cellIndex[1],i)
-                #update one lattice site outside the von neumann neighbourhood to be the same as the current cell
-                switch = np.random.random_integers(1,4)
+
+        # this 'method' distributes cells randomly around the center of the lattice
+        if method is 'random':
+            for i in range(1,numberOfCells+1):
+                if(self.setLatticePosition(cellIndex[0], cellIndex[1], i)):
+                    # set everything the the von neumann neighbourhood
+                    # to the same cell type
+                    self.setLatticePosition(cellIndex[0],cellIndex[1]-1,i)
+                    self.setLatticePosition(cellIndex[0],cellIndex[1]+1,i)
+                    self.setLatticePosition(cellIndex[0]-1,cellIndex[1],i) 
+                    self.setLatticePosition(cellIndex[0]-1,cellIndex[1],i)
+                    #update one lattice site outside the von neumann neighbourhood to be the same as the current cell
+                    switch = np.random.random_integers(1,4)
+                    if switch == 1:
+                        self.setLatticePosition(cellIndex[0]+1,cellIndex[1]+1,i)
+                    elif switch == 2:
+                        self.setLatticePosition(cellIndex[0]+1,cellIndex[1]-1,i)
+                    elif switch == 2:
+                        self.setLatticePosition(cellIndex[0]-1,cellIndex[1]+1,i)
+                    else:             
+                        self.setLatticePosition(cellIndex[0]-1,cellIndex[1]-1,i)
+                else:
+                    i -= 1
+                # update coordinates for next location
+                # print i
+                
+                switch = i%4
+                
                 if switch == 1:
-                    self.setLatticePosition(cellIndex[0]+1,cellIndex[1]+1,i)
+                    cellIndex[1] = cellIndex[1] - (cycle * 2)
                 elif switch == 2:
-                    self.setLatticePosition(cellIndex[0]+1,cellIndex[1]-1,i)
-                elif switch == 2:
-                    self.setLatticePosition(cellIndex[0]-1,cellIndex[1]+1,i)
-                else:             
-                    self.setLatticePosition(cellIndex[0]-1,cellIndex[1]-1,i)
-            else:
-                i -= 1
-            # update coordinates for next location
-            # print i
+                    cellIndex[0] = cellIndex[0] + (cycle * 2)
+                elif switch == 3:
+                    cellIndex[1] = cellIndex[1] + (cycle * 2)
+                else:
+                    cycle += 1
+                    cellIndex[1] +=1
+                    cellIndex[0] = cellIndex[0] - (cycle*2)
             
-            switch = i%4
+        # this 'method' packs all the cells in the center of the lattice
+        if method is 'central':
+            N = numberOfCells
+            sqrtN = np.sqrt( numberOfCells ).astype(int)
+
+            M = self.size
+
+            self.cellList = [ Cell( 1, i ) for i in range(N + 1) ]
+
+            # starter areas of each cell spin, leaving out zero
+            a = kwargs.get('starterAreas', [ kwargs.get( 'starterArea', 6 ) for i in range(N + 1) ] )
+            sqrta = np.sqrt(a).astype(int).tolist()
             
-            if switch == 1:
-                cellIndex[1] = cellIndex[1] - (cycle * 2)
-            elif switch == 2:
-                cellIndex[0] = cellIndex[0] + (cycle * 2)
-            elif switch == 3:
-                cellIndex[1] = cellIndex[1] + (cycle * 2)
-            else:
-                cycle += 1
-                cellIndex[1] +=1
-                cellIndex[0] = cellIndex[0] - (cycle*2)
-        
+            # setting the 0th position to refer to the ECM
+            a[0], sqrta[0], self.cellList[0] = -1, -1, Cell(0)
+            startValue = int(0.25 * (M - sqrtN))
+            x0, y0 = startValue, startValue
+
+            # print x0,y0
+
+            def populate ( left, right, top, bottom, spin ):
+                for y in range( top, bottom ):
+                    for x in range( left, right ):
+                        self.setLatticePosition( x, y, spin )
+            # print 'a side has length:'+str(sqrtN*np.average(sqrta).astype(int))
+            # here we start populating the grids with spins.
+            print sqrtN        
+            for i in range(1,N):
+                populate( x0, x0 + sqrta[i], y0, y0 + sqrta[i], i )
+                x0 = x0 + sqrta[i]
+                if x0 > (sqrtN * np.average(sqrta).astype(int)):
+                    y0 = y0 + np.average(sqrta).astype(int)
+                    x0 = startValue
+                print x0, y0, i
+
         # for visualizing the matrix 
         self.imageRep = plt.imshow(self.matrix, interpolation='nearest')
         plt.colorbar(orientation='vertical')
