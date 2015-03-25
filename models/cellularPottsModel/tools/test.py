@@ -15,11 +15,11 @@ from CustomEnergyFunctions import CustomEnergyFunctions
 from Gradient import Gradient
 
 energies = {
-	'10': (1,1),
-	'-2': (1,2),
-	'30': (2,2),
-	'15': (2,0),
-	'15': (1,0)
+	'5': (1,1),
+	'0': (1,2),
+	'0': (2,2),
+	'0': (2,0),
+	'16': (1,0)
 }
 
 specialFunctions = {
@@ -33,20 +33,44 @@ specialObjects = {
 }
 efunc = EnergyFunction(energies, specialFunctions)
 
-x = CellularPottsModel(20, efunc, specialObjects=specialObjects)
+x = CellularPottsModel(30, efunc, specialObjects=specialObjects)
 # print 'x.size=',x.size
 #initialize with 1 cell
-x.initialize(10)
+
+x.initialize(20, method='central', starterArea=20)
+import numpy as np
+import matplotlib.mlab as mlab
+import matplotlib.pyplot as plt
+
+dataprior = [ cell.getArea() for cell in x.cellList if cell.getArea() > -1]
+
 
 # print 'x.matrix=',x.matrix
 
 # prior = Heatmap(z=x.matrix.tolist())
 x.visualize()
 print 'running simulation with 100 MCS (neumann neighbourhood function)'
-x.runSimulation(100, 'neumann', showVisualization=True)
+x.runSimulation(500, method='neumann', showVisualization=False)
 print 'simulation over'
-print x.cellList
+
+
+
+
+data = [ cell.getArea() for cell in x.cellList if cell.getArea() > -1]
+
+
+fig1 = plt.figure(2)
+bins = range(0,60)
+plt.hist(dataprior, bins, alpha=0.5, label='Pre')
+plt.hist(data, bins, alpha=0.5, label='Post')
+plt.legend(loc='upper right')
+plt.xlabel('Cell Area')
+plt.ylabel('Number of Cells')
+plt.title('Distribution of Cell Areas Pre and Post Simulation')
+fig1.show()
+print 'plotted histogram'
 # print 'x.matrix=',x.matrix
+
 x.visualize(hold=True)
 
 # moore = Heatmap(
