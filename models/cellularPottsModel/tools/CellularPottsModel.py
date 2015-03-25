@@ -7,15 +7,20 @@ import numpy as np
 
 class CellularPottsModel(Lattice):
 
-    CELL_AREA_DEFAULT = 40
+    CELL_AREA_DEFAULT = 20
 
     def __init__(self, size, energyFunction, specialObjects = {}):
         Lattice.__init__(self, size, energyFunction, specialObjects)
 
-
+    def deepCopy(self):
+        copy = CellularPottsModel(self.size, self.energyFunction)
+        copy.initialize(self.numberOfCells)
+        copy.matrix = np.copy(self.matrix)
+        return copy
 
     def metropolis(self, method='moore', showVisualization=False):
 
+        # checks if all cells are dead, if they are then just return ALLCELLSDEAD string
         if self.allCellsDead():
             return 'ALLCELLSDEAD'
 
@@ -37,14 +42,17 @@ class CellularPottsModel(Lattice):
         neighbours = self.getNeighbourIndices( x, y , method )
         neighbourCells = []
 
+        ## this for loop checks the neighbours returned to see if they are
+        ## edge cases or not, if they are they are discarded
+        ## if they are not, we get the CELL at that position and 
+        ## append it to the neighbourCells list to be used later.
         for neighbour in neighbours:
-            # we first make sure we are not over reaching the board
             if not self.isEdgeCase(neighbour[0], neighbour[1]):
                 neighbourCells.append( self.getCellAt( neighbour[0], neighbour[1] ) )
             else:
                 neighbours.remove(neighbour)
-        # print '#neighbours:',len(neighbourCells)
         
+
         if len(neighbourCells) == 0:
             return
 
