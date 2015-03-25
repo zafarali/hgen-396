@@ -12,7 +12,11 @@ class CellularPottsModel(Lattice):
     def __init__(self, size, energyFunction, specialObjects = {}):
         Lattice.__init__(self, size, energyFunction, specialObjects)
 
-
+    def deepCopy(self):
+        copy = CellularPottsModel(self.size, self.energyFunction)
+        copy.initialize(self.numberOfCells)
+        copy.matrix = np.copy(self.matrix)
+        return copy
 
     def metropolis(self, method='moore', showVisualization=False):
 

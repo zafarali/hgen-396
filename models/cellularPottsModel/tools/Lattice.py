@@ -33,8 +33,8 @@ class Lattice:
         return Tools.isEdgeCase(x,y,0,self.size-1)
 
     def deepCopy(self):
-        copy = Lattice(self.size)
-        copy.initialize(self.numberOfCells, self.cellArea)
+        copy = Lattice(self.size, self.energyFunction)
+        copy.initialize(self.numberOfCells)
         copy.matrix = np.copy(self.matrix)
         return copy
 
@@ -133,6 +133,7 @@ class Lattice:
                 print x0, y0, i
 
         # for visualizing the matrix 
+        plt.figure('GenericLattice2D')
         self.imageRep = plt.imshow(self.matrix, interpolation='nearest')
         plt.colorbar(orientation='vertical')
         plt.draw()
@@ -191,10 +192,12 @@ class Lattice:
 
     def visualize(self, hold=False):
         self.imageRep.set_data(self.matrix)
+        plt.figure('GenericLattice2D')
         if not hold:
             plt.draw()
             plt.pause(0.01)
         else:
+            plt.draw()
             plt.show()
 
         
