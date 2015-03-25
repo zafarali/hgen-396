@@ -37,18 +37,20 @@ x = CellularPottsModel(20, efunc, specialObjects=specialObjects)
 # print 'x.size=',x.size
 #initialize with 1 cell
 x.initialize(10)
+x.saveData()
 
 # print 'x.matrix=',x.matrix
 
 # prior = Heatmap(z=x.matrix.tolist())
 x.visualize()
 print 'running simulation with 100 MCS (neumann neighbourhood function)'
-x.runSimulation(100, 'neumann', showVisualization=True)
+x.runSimulation(100, 'neumann', showVisualization=False)
 print 'simulation over'
 print x.cellList
 # print 'x.matrix=',x.matrix
 x.visualize(hold=True)
 
+x.saveData(what='cells')
 # moore = Heatmap(
 # 	z=x.matrix.tolist(),
 # 	name='Moore Neighbourhood'

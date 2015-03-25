@@ -198,4 +198,23 @@ class Lattice:
             plt.draw()
             plt.show()
 
-        
+    def saveData (self, filename=None, what='lattice'):
+        import time
+        import csv
+        filename = str(filename)+'_'+str(time.time()) if filename else str(time.time())
+        if ( what is 'lattice' ) or ( what is 'all' ):
+            # save lattice data to a file
+            c = csv.writer ( open( filename+'_lattice.csv', "wb" ) )
+            for row in self.matrix:
+                c.writerow( row.tolist() )
+            print 'Written Information'
+
+        if ( what is 'cells' ) or ( what is 'all' ):
+            #save cell data to a file
+            c = csv.writer(open(filename+'_cells.csv', "wb"))
+            c.writerow( ['spin', 'type', 'state', 'area', 'isDead'] )
+            for cell in self.cellList:
+                c.writerow([cell.getSpin(), cell.getType(), cell.getState(), cell.getArea(), cell.isDead()])
+            
+
+
