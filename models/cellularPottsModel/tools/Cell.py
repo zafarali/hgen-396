@@ -32,7 +32,9 @@ class Cell:
         return self.cellArea
     def isDead( self ):
         return self.cellArea == 0
-
+    def getState(self):
+        return self.cellState
+        
     def evolve( self, information=DEFAULT_INFORMATION, gradients=[]):
         #this determines if the cell divides, grows or dies
         # does the cell become cancerous?

@@ -36,6 +36,8 @@ efunc = EnergyFunction(energies, specialFunctions)
 x = CellularPottsModel(30, efunc, specialObjects=specialObjects)
 # print 'x.size=',x.size
 #initialize with 1 cell
+x.initialize(10)
+x.saveData()
 
 x.initialize(20, method='central', starterArea=20)
 import numpy as np
@@ -73,6 +75,7 @@ print 'plotted histogram'
 
 x.visualize(hold=True)
 
+x.saveData(what='cells')
 # moore = Heatmap(
 # 	z=x.matrix.tolist(),
 # 	name='Moore Neighbourhood'
