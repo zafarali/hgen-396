@@ -88,14 +88,23 @@ class CellularPottsModel(Lattice):
         trialNeighbour = neighbourCells[randomIndex]
         
         # print 'Trial spin:',trialSpin
-        print 'x_initial=',options['x']
         options['x'] = neighbours[randomIndex][0]
         options['y'] = neighbours[randomIndex][1]
-        print 'x_trial=',options['x']
+
+        ## increasing and decreasing respective areas
+        ## to be able to calcualte the contribution from the area constraint term
+        currentCell.decreaseArea()
+        trialNeighbour.increaseArea()
+
         # calculate H_final
         H_final = 0
         H_final = self.energyFunction.calculateH( trialNeighbour, neighbourCells, options )
         print 'H_final=',H_final
+
+        ## reverting the areas back to the original
+        currentCell.increaseArea()
+        trialNeighbour.decreaseArea()
+
         # print 'H_final',H_final
 
         # deltaH = H_final - H_initial
