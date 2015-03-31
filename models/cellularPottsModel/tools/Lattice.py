@@ -51,7 +51,8 @@ class Lattice:
         self.numberOfCells = numberOfCells
         
         # code to initialize cell list
-        self.cellList = [Cell(1, i-1) for i in range(1,numberOfCells+2)]
+        self.cellList = [Cell(1, i) for i in range(0,numberOfCells+1)]
+        print self.cellList
         self.cellList[0] = Cell(0)
         
         #code to initialize lattice here
@@ -104,14 +105,13 @@ class Lattice:
 
             M = self.size
 
-            self.cellList = [ Cell( 1, i ) for i in range(N + 1) ]
-
             # starter areas of each cell spin, leaving out zero
             a = kwargs.get('starterAreas', [ kwargs.get( 'starterArea', 6 ) for i in range(N + 1) ] )
             sqrta = np.sqrt(a).astype(int).tolist()
             
             # setting the 0th position to refer to the ECM
-            a[0], sqrta[0], self.cellList[0] = -1, -1, Cell(0)
+            a[0], sqrta[0] = -1, -1
+
             startValue = int(0.25 * (M - sqrtN))
             x0, y0 = startValue, startValue
 
@@ -124,7 +124,7 @@ class Lattice:
             # print 'a side has length:'+str(sqrtN*np.average(sqrta).astype(int))
             # here we start populating the grids with spins.
             print sqrtN        
-            for i in range(1,N):
+            for i in range(1,N+1):
                 populate( x0, x0 + sqrta[i], y0, y0 + sqrta[i], i )
                 x0 = x0 + sqrta[i]
                 if x0 > (sqrtN * np.average(sqrta).astype(int)):
