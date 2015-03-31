@@ -28,6 +28,7 @@ class CellularPottsModel(Lattice):
 
         #choose a lattice site at random.
         x,y=np.random.randint(self.size,size=2)
+        print 'location x,y=',x,y, ',cell at this location:',self.getSpinAt(x,y)
 
         #get the cell and cell type
 
@@ -82,6 +83,7 @@ class CellularPottsModel(Lattice):
         
         H_initial = self.energyFunction.calculateH( currentCell, neighbourCells, options )
         print 'H_initial=',H_initial
+        print '--'
         # print 'H_initial:',H_initial
         # select a trial spin from neighbours
         randomIndex = np.random.randint(len(neighbourCells))
@@ -119,11 +121,12 @@ class CellularPottsModel(Lattice):
             self.setLatticePosition(x,y, trialNeighbour.getSpin() ,True)
             if showVisualization:
                 self.visualize()
-        print spinTrue
+        print 'change spin?', bool(spinTrue)
         selected_cell['Cell'].evolve()
 
     
     def runSimulation(self, MCS, method='moore', showVisualization=False):
         # 1 Monte Carlo Time Step = N Spin copy attempts
         for i in range(0, MCS * self.size):
+            print '--------',i,'th Spin Copy Attempt --------'
             if self.metropolis(method=method, showVisualization=showVisualization) is 'ALLCELLSDEAD': break

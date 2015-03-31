@@ -10,7 +10,9 @@ class CustomEnergyFunctions:
 		# implementation based on Granier Glazier 1992
 
 		currentAreas = np.array([ cell.getArea() for cell in options['cellList'] ])
+		print 'currentAreas=',currentAreas
 		targetAreas = np.array(options['cellTargetAreaList'])
+		print 'targetArea=',targetAreas
 		theta = [ 0 if targetArea < 0 else 1 for targetArea in targetAreas ]
 		diffs = np.dot(theta, ((currentAreas - targetAreas)**2))
 		return np.sum(diffs).astype(int)
