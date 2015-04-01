@@ -15,14 +15,19 @@ class EnergyFunction:
 			if len(typePair) == 1:
 				raise DeprecationWarning('No longer support for reverse energy definitions')
 			x, y = typePair.split(',')
-			index = ''.join([str( x ) , ',' , str( y )])
+			# these two indexes allow us to store x,y = e and y,x = e
+			index = ''.join( [ str( x ) , ',' , str( y ) ] )
+			index2 = ''.join( [ str(y) , ',' , str(y) ] )
 			self.energies[ index ] = float(energy)
+			self.energies[ index2 ] = float(energy)
 
 		self.specialFunctions = specialFunctions
 
 	def pairWiseEnergy( self, cell1, cell2 ):
 		# J( cell1.type, cell2.type ) ( 1 - kdelta ( cell1.spin, cell2.spin ) )
-		return self.determineInteractionStrength( cell1, cell2 ) 
+		indexTest = ''.join([str( cell1.getType() ), ',' , str( cell2.getType() )])
+		strength = self.energies.get( indexTest , 'tryagain' )
+		return 0 if strength is 'tryagain' else strength
 
 	
 	def calculateH( self, cell, neighbours, otherOptions = {} ):
@@ -44,20 +49,3 @@ class EnergyFunction:
 
 		#return total energies
 		return neighbourInteractionStrength + extraEnergies
-
-
-	def determineInteractionStrength( self, cell1, cell2 ):
-
-		# following try catch allows us to key 1,2 or 2,1 
-		indexTest = ''.join([str( cell1.getType() ), ',' , str( cell2.getType() )])
-		
-		strength = self.energies.get( indexTest , 'tryagain' )
-
-		if strength is 'tryagain':
-			indexTest = ''.join([str( cell2.getType() ), ',' , str( cell1.getType() )])
-			strength = self.energies.get( indexTest, 'tryagain' )
-
-		if strength is 'tryagain':
-			return 0
-		else:
-			return strength
