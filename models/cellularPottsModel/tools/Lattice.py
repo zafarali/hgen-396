@@ -207,6 +207,7 @@ class Lattice:
         if ( what is 'lattice' ) or ( what is 'all' ):
             # save lattice data to a file
             c = csv.writer ( open( filename+'_lattice.csv', "wb" ) )
+            c.writerow( [ self.numberOfCells] )
             for row in self.matrix:
                 c.writerow( row.tolist() )
             print 'Written Information'
