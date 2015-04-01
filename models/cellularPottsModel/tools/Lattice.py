@@ -113,7 +113,14 @@ class Lattice:
             a[0], sqrta[0] = -1, -1
 
             startValue = int(0.25 * (M - sqrtN))
-            x0, y0 = startValue, startValue
+            startingPositions = kwargs.get( 'pos' , ( startValue , startValue ) )
+
+            # checking boundaries, we can't place cells off the grid
+            if startingPositions[0] >= M or startingPositions[0] >= M:
+                print 'Specified out of range pos, defaulting to precomputed values'
+                startingPositions = ( startValue , startValue )
+
+            x0, y0 = startingPositions
 
             # print x0,y0
 
