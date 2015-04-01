@@ -11,8 +11,10 @@ class EnergyFunction:
 
 	def __init__( self, energies , specialFunctions = None):
 		self.energies = {}
-		for energy, typePair in energies.items():
-			x, y = typePair
+		for typePair, energy in energies.items():
+			if len(typePair) == 1:
+				raise DeprecationWarning('No longer support for reverse energy definitions')
+			x, y = typePair.split(',')
 			index = ''.join([str( x ) , ',' , str( y )])
 			self.energies[ index ] = float(energy)
 
