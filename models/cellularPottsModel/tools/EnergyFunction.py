@@ -17,7 +17,7 @@ class EnergyFunction:
 			x, y = typePair.split(',')
 			# these two indexes allow us to store x,y = e and y,x = e
 			index = ''.join( [ str( x ) , ',' , str( y ) ] )
-			index2 = ''.join( [ str(y) , ',' , str(y) ] )
+			index2 = ''.join( [ str(y) , ',' , str(x) ] )
 			self.energies[ index ] = float(energy)
 			self.energies[ index2 ] = float(energy)
 
