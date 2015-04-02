@@ -30,7 +30,7 @@ class Lattice:
         self.specialObjects = specialObjects
 
     def isEdgeCase(self, x,y):
-        return Tools.isEdgeCase(x,y,0,self.size-1)
+        return Tools.isEdgeCase(x,y,0,self.size)
 
     def deepCopy(self):
         copy = Lattice(self.size, self.energyFunction)
