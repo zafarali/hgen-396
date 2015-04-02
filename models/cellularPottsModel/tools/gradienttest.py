@@ -15,11 +15,11 @@ from CustomEnergyFunctions import CustomEnergyFunctions
 from Gradient import Gradient
 
 energies = {
-	'5': (1,1),
-	'0': (1,2),
-	'0': (2,2),
-	'0': (2,0),
-	'16': (1,0)
+	'1,1':1,
+	'1,2':0,
+	'2,2':0,
+	'2,0':0,
+	'1,0':5
 }
 
 specialFunctions = {
@@ -29,60 +29,45 @@ specialFunctions = {
 
 import numpy as np
 gradients = {
-	'OxygenGradient': Gradient(lambda x: (x-30)**2 , 30, interactionStrength=200000000000),
+	'OxygenGradient': Gradient(lambda x: (27*x)**1 , 9, interactionStrength=1),
 }
 gradients2 = {
-	'OxygenGradient': Gradient(lambda x: -(x-30)**2 , 30, interactionStrength=1500000),
+	'OxygenGradient': Gradient(lambda x: 0 , 9, interactionStrength=1),
 }
 efunc = EnergyFunction(energies, specialFunctions)
 
-x = CellularPottsModel(30, efunc, specialObjects=gradients)
-# y = CellularPottsModel(30, efunc, specialObjects=gradients2)
-x.initialize(20, method='central', starterArea=20)
-# y.initialize(20, method='central', starterArea=20)
+x = CellularPottsModel(9, efunc, specialObjects=gradients)
+y = CellularPottsModel(9, efunc, specialObjects=gradients2)
+x.initialize(1, method='central', starterArea=1, name='c = +27')
+y.initialize(1, method='central', starterArea=1, name='control')
 
-x.saveData('positive-x-squared-pre')
-# y.saveData('negative-x-squared-pre')
-
-# lattici = []
-# for i in range(0, 2):
-	# lattici.append(x.deepCopy())
+x.saveData('testc-x')
+y.saveData('testc-control')
 
 import numpy as np
 import matplotlib.mlab as mlab
 import matplotlib.pyplot as plt
 
 
-# print 'x.matrix=',x.matrix
+x.runSimulation(400, method='neumann', showVisualization=False)
+y.runSimulation(400, method='neumann', showVisualization=False)
 
-# prior = Heatmap(z=x.matrix.tolist())
-# print 'running 50 lattices'
-# print 'running simulation with 100 MCS (neumann neighbourhood function)'
-
-# for index,lattice in enumerate(lattici):
-	# lattice.runSimulation(20, method='neumann', showVisualization=True)
-	# lattice.saveData('gradientExperiment-'+str(index), what='cells')
-	# data.append([ cell.getArea() for cell in lattice.cellList if cell.getArea() > -1])
-
-x.runSimulation(1000, method='neumann', showVisualization=False)
-# y.runSimulation(400, method='neumann', showVisualization=False)
-print x.allCellsDead()
 print 'simulations over'
 
-x.saveData('positive-x-squared-post')
-# y.saveData('negative-x-squared-post')
+x.visualize()
+y.visualize()
 
-fig1 = plt.figure(2)
+fig1 = plt.figure('c+30 test')
 plt.plot(x.specialObjects['OxygenGradient'].interactions)
-plt.title('positive-x-squared')
+plt.title('c = +30 test')
 plt.xlabel('position')
 plt.ylabel('magnitude')
 
-# fig2 = plt.figure(3)
-# plt.plot(y.specialObjects['OxygenGradient'].interactions)
-# plt.title('negative-x-squared')
-# plt.xlabel('position')
-# plt.ylabel('magnitude')
+fig2 = plt.figure('c control')
+plt.plot(y.specialObjects['OxygenGradient'].interactions)
+plt.title('control')
+plt.xlabel('position')
+plt.ylabel('magnitude')
 plt.show()
 
 
