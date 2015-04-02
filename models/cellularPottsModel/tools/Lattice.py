@@ -47,7 +47,7 @@ class Lattice:
     def initialize(self, numberOfCells, **kwargs):
         self.cellTargetAreaList = kwargs.get('cellTargetAreaList', {'0': -1, '1': self.CELL_AREA_DEFAULT, '2': self.CELL_AREA_DEFAULT})
         method = kwargs.get('method', 'random')
-
+        self.name = kwargs.get('name', 'GenericLattice2D')
         self.numberOfCells = numberOfCells
         
         # code to initialize cell list
@@ -140,7 +140,7 @@ class Lattice:
                 print x0, y0, i
 
         # for visualizing the matrix 
-        plt.figure('GenericLattice2D')
+        plt.figure(self.name)
         self.imageRep = plt.imshow(self.matrix, interpolation='nearest')
         plt.colorbar(orientation='vertical')
         plt.draw()
@@ -199,7 +199,7 @@ class Lattice:
 
     def visualize(self, hold=False):
         self.imageRep.set_data(self.matrix)
-        plt.figure('GenericLattice2D')
+        plt.figure(self.name)
         if not hold:
             plt.draw()
             plt.pause(0.01)
