@@ -4,8 +4,7 @@ class Gradient:
 	# creates a 1D gradient
 
 
-	def __init__( self, gradientFunc, latticeSize, interactionStrength = 0):
-		
+	def __init__( self, gradientFunc, latticeSize, interactionStrength = 1):
 		self.interactions = [gradientFunc(i) for i in range(0, latticeSize)]
 		# print self.interactions
 		self.interactionStrength = interactionStrength
