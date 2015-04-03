@@ -32,9 +32,9 @@ class Lattice:
     def isEdgeCase(self, x,y):
         return Tools.isEdgeCase(x,y,0,self.size)
 
-    def deepCopy(self):
+    def deepCopy(self, name='GenericLattice2D'):
         copy = Lattice(self.size, self.energyFunction)
-        copy.initialize(self.numberOfCells)
+        copy.initialize(self.numberOfCells, name=name)
         copy.matrix = np.copy(self.matrix)
         return copy
 
@@ -116,7 +116,7 @@ class Lattice:
             startingPositions = kwargs.get( 'pos' , ( startValue , startValue ) )
 
             # checking boundaries, we can't place cells off the grid
-            if startingPositions[0] >= M or startingPositions[0] >= M:
+            if self.isEdgeCase( startingPositions[0] , startingPositions[1] ):
                 print 'Specified out of range pos, defaulting to precomputed values'
                 startingPositions = ( startValue , startValue )
 

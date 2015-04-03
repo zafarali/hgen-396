@@ -12,9 +12,9 @@ class CellularPottsModel(Lattice):
     def __init__(self, size, energyFunction, specialObjects = {}):
         Lattice.__init__(self, size, energyFunction, specialObjects)
 
-    def deepCopy(self):
+    def deepCopy(self, name='GenericLattice2D'):
         copy = CellularPottsModel(self.size, self.energyFunction, self.specialObjects)
-        copy.initialize(self.numberOfCells)
+        copy.initialize(self.numberOfCells, name=name)
         copy.matrix = np.copy(self.matrix)
         return copy
 
