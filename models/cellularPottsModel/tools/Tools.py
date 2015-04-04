@@ -37,3 +37,11 @@ class Tools:
     # @staticmethod
     # def sqrt( arg ):
     #     return np.sqrt(arg).astype(int)
+    @staticmethod
+    def getNeighbourIndices(x, y, method='moore'):
+        # returns the moore neighbourhood around x and y
+        # WARN: this doesn't check for edge cases...
+        if method is 'neumann':
+            return [[x, y-1], [x, y+1], [x+1, y], [x-1, y]]
+        else:
+            return [[x, y+1], [x+1, y], [x,y-1], [x-1,y], [x+1,y+1], [x-1,y+1], [x-1, y-1], [x+1,y-1]]
