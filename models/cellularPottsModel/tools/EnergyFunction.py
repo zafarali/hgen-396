@@ -13,7 +13,7 @@ class EnergyFunction:
 		self.energies = {}
 		for typePair, energy in energies.items():
 			if len(typePair) == 1:
-				raise DeprecationWarning('No longer support for reverse energy definitions')
+				raise DeprecationWarning('No longer support for reverse energy definitions, more information: https://github.com/zafarali/hgen-396/issues/22')
 			x, y = typePair.split(',')
 			# these two indexes allow us to store x,y = e and y,x = e
 			index = ''.join( [ str( x ) , ',' , str( y ) ] )

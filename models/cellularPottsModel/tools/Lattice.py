@@ -97,7 +97,36 @@ class Lattice:
                     cycle += 1
                     cellIndex[1] +=1
                     cellIndex[0] = cellIndex[0] - (cycle*2)
-            
+        
+        # this method sets the area between left, right, top and bottom with
+        # value of spin.
+        def populate ( left, right, top, bottom, spin ):
+            for y in range( top, bottom ):
+                for x in range( left, right ):
+                    self.setLatticePosition( x, y, spin )           
+
+        if method is 'custom':
+            N, M = numberOfCells, self.size
+
+            # get the starter areas for each cell spin
+            # we first check if we are supplied with a list of starter areas
+            # or else we just default to the same starter area for each cell
+            a = kwargs.get( 'starterAreas', [ kwargs.get( 'starterArea', 4 ) for i in range( N + 1 ) ] )
+            sqrta = np.sqrt(a).astype(int).tolist()
+            a[0], sqrta[0] = -1, -1
+            positions = kwargs.get( 'pos', 'failed' )
+            if positions is 'failed':
+                raise KeyError('When using method=custom, you must supply positions for each cell')
+            elif len(positions) != N:
+                raise ValueError('number of positions supplied must be the same as the number of cells')
+            else:
+                for i in range( 1, N + 1 ):
+                    x, y = positions[ i - 1 ]
+                    if self.isEdgeCase( x , y ):
+                        raise ValueError(str(x) + ',' + str(y) + ' are not in the range of the lattice')
+                    populate( x, x + sqrta[i], y, y + sqrta[i], i )
+                    print x, y, i                    
+
         # this 'method' packs all the cells in the center of the lattice
         if method is 'central':
             N = numberOfCells
@@ -124,10 +153,7 @@ class Lattice:
 
             # print x0,y0
 
-            def populate ( left, right, top, bottom, spin ):
-                for y in range( top, bottom ):
-                    for x in range( left, right ):
-                        self.setLatticePosition( x, y, spin )
+
             # print 'a side has length:'+str(sqrtN*np.average(sqrta).astype(int))
             # here we start populating the grids with spins.
             print sqrtN        
