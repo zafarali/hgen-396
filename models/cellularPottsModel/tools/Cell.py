@@ -35,18 +35,19 @@ class Cell:
     def getState(self):
         return self.cellState
         
-    def evolve( self, information=DEFAULT_INFORMATION, gradients=[]):
+    def evolve( self, **kwargs):
+        if self.cellSpin == 0: 
+            return
+        
+        mutationRate = kwargs.get('mutationRate')
         #this determines if the cell divides, grows or dies
         # does the cell become cancerous?
-        #if self.cellType != 2 and self.cellSpin != 0:
-        #    mutates = np.random.binomial(1, Tools.poissonProbability(information['mutationRate']))
-        #    if mutates:
-        #        self.cellType = 2
-        #        print self,'mutated'
-
-        #for gradient in gradients:
-        #    self.interactWithGradient(gradient)
-
+        
+        if self.cellType != 2: # if not already mutated
+           mutates = np.random.binomial( 1, mutationRate )
+           if mutates:
+               self.cellType = 2
+               print self,'mutated'
         self.cellTimer += 1
 
     def interactWithGradient(self, gradient):

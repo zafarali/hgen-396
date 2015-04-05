@@ -18,7 +18,7 @@ class CellularPottsModel(Lattice):
         copy.matrix = np.copy(self.matrix)
         return copy
 
-    def metropolis(self, method='moore', showVisualization=False):
+    def metropolis(self, method='moore', showVisualization=False, mutationRate = 0):
 
         # checks if all cells are dead, if they are then just return ALLCELLSDEAD string
         if self.allCellsDead():
@@ -122,11 +122,12 @@ class CellularPottsModel(Lattice):
             if showVisualization:
                 self.visualize()
         print 'change spin?', bool(spinTrue)
-        selected_cell['Cell'].evolve()
+        selected_cell['Cell'].evolve( mutationRate = mutationRate )
 
     
-    def runSimulation(self, MCS, method='moore', showVisualization=False):
+    def runSimulation(self, MCS, method='moore', showVisualization=False, **kwargs):
         # 1 Monte Carlo Time Step = N Spin copy attempts
+        mutationRate = kwargs.get('mutationRate' , 0)
         for i in range(0, MCS * self.size):
             print '--------',i,'th Spin Copy Attempt --------'
-            if self.metropolis(method=method, showVisualization=showVisualization) is 'ALLCELLSDEAD': break
+            if self.metropolis(method=method, showVisualization=showVisualization, mutationRate=mutationRate) is 'ALLCELLSDEAD': break
