@@ -228,7 +228,7 @@ class Lattice:
         plt.figure(self.name)
         if not hold:
             plt.draw()
-            plt.pause(0.01)
+            plt.pause(0.0001)
         else:
             plt.draw()
             plt.show()
@@ -251,6 +251,6 @@ class Lattice:
             c.writerow( ['spin', 'type', 'state', 'area', 'isDead'] )
             for cell in self.cellList:
                 c.writerow([cell.getSpin(), cell.getType(), cell.getState(), cell.getArea(), cell.isDead()])
-            
+            print 'Written Information'
 
 

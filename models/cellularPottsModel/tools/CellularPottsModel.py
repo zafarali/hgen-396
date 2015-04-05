@@ -129,5 +129,5 @@ class CellularPottsModel(Lattice):
         # 1 Monte Carlo Time Step = N Spin copy attempts
         mutationRate = kwargs.get('mutationRate' , 0)
         for i in range(0, MCS * self.size):
-            print '--------',i,'th Spin Copy Attempt --------'
+            print '--------',i,'th Spin Copy Attempt / ', int( i / float(self.size) ) , 'th MCS --------'
             if self.metropolis(method=method, showVisualization=showVisualization, mutationRate=mutationRate) is 'ALLCELLSDEAD': break

@@ -62,12 +62,12 @@ def numberOfComponents( data, N ):
 
 
 if __name__ == '__main__':
-	fileName = str(sys.argv[1])
-	data = []
-	with open(fileName, 'rb') as csvfile:
-		reader = csv.reader(csvfile)
-		N = int(reader.next()[0])
-		for row in reader:
-			data.append(map(lambda x: int( float(x) ), row))
-
-	numberOfComponents( data, N )
+	fileNames = sys.argv[1:]
+	for fileName in fileNames:
+		data = []
+		with open(fileName, 'rb') as csvfile:
+			reader = csv.reader(csvfile)
+			N = int(reader.next()[0])
+			for row in reader:
+				data.append(map(lambda x: int( float(x) ), row))
+		numberOfComponents( data, N )
