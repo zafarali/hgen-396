@@ -27,6 +27,8 @@ class EnergyFunction:
 		# J( cell1.type, cell2.type ) ( 1 - kdelta ( cell1.spin, cell2.spin ) )
 		indexTest = ''.join([str( cell1.getType() ), ',' , str( cell2.getType() )])
 		strength = self.energies.get( indexTest , 'tryagain' )
+		# if runningInSafeMode():
+		# 	raise LookupError('An interaction Strength has not been supplied, please check the energies supplied')
 		return 0 if strength is 'tryagain' else strength
 
 	
