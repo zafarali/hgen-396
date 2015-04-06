@@ -158,12 +158,19 @@ class Lattice:
             # here we start populating the grids with spins.
             print sqrtN        
             for i in range(1,N+1):
+                print i,'th populate:', x0, x0+sqrta[i], y0, y0+sqrta[i]
                 populate( x0, x0 + sqrta[i], y0, y0 + sqrta[i], i )
-                x0 = x0 + sqrta[i]
-                if x0 > (sqrtN * np.average(sqrta).astype(int)):
-                    y0 = y0 + np.average(sqrta).astype(int)
-                    x0 = startValue
-                print x0, y0, i
+                # x0 = x0 + sqrta[i]
+                y0 = y0 + sqrta[i]
+                # if x0 > (sqrtN * np.average(sqrta).astype(int)) or x0 > M-startValue:
+                if not (y0 < M-startValue):
+                    print x0,'<',M
+                    # y0 = y0 + np.average(sqrta).astype(int)
+                    x0 = x0 + np.average(sqrta).astype(int)
+                    # x0 = startValue
+                    y0 = startValue
+                    print y0, x0
+                # print x0, y0, i
 
         # for visualizing the matrix 
         plt.figure(self.name)
