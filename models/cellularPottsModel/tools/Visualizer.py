@@ -5,11 +5,12 @@ import matplotlib.pyplot as plt
 
 def Visualizer( data, N, name ):
 	# NEW COLOR BAR
-	def discrete_cmap(N, base_cmap='jet'):
+	def discrete_cmap(N, base_cmap='prism'):
 		if N == 1:
-			return plt.cm.get_cmap('jet')
+			return plt.cm.get_cmap('prism')
 		base = plt.cm.get_cmap(base_cmap)
 		color_list = base(np.linspace(0,1,N+1))
+		color_list[0] = (.5,.5,.5,1.0)
 		# print color_list
 		cmap_name = base.name+str(N)
 		return base.from_list(cmap_name, color_list, N+1)
