@@ -11,30 +11,71 @@
 \begin{document}
 
 \begin{titlepage}
-    \begin{center}
-        \emph{Student:}\\
-        Zafarali Ahmed (260560472)\\[1.0cm]
-        \emph{Supervisor:}
-        Dr. Simon Gravel
-        \emph{Submission Date:}
-        \today
-    \end{center}
+	\begin{center}
+		~\\[2.5cm]
+		{\Huge Simulating Detachment of Tumor Cell Clusters}\\[1.5cm]
+		{\Large HGEN 396: Human Genetics Research Project}\\[7.5cm]
+		\emph{Student:}\\
+		Zafarali Ahmed (260560472)\\[1.0cm]
+		\emph{Supervisor:}\\
+		Dr. Simon Gravel\\[1.0cm]
+		\emph{Submission Date:}\\
+		\today\\
+		\emph{McGill University}
+	\end{center}
 \end{titlepage}
 
 \begin{abstract}
-
+Using an implementation of the Cellular Potts Model, we attempt to simulate the detachment of a tumor cell from a tumor. Blood of patients with cancer contain Circulating Tumor Cells (CTCs) and recent advances in capture technology find that CTCs exist in single cells as well as clusters \cite{Aceto2014}. Studies have hypothesized their relative contributions to metastasis, including the controversial role of plakoglobin. 
 \end{abstract}
 
 \section{Introduction}
+Cancer is the autonomous and uncontrolled growth of cells that forms a feed forward system to reinforce the tumors’ existence \cite{hallmarks}. However, for cancerous cells to keep growing and overcome the limitations of diffusion of nutrients, tumors have two solutions: angiogenesis and metastasis. While angiogenesis permits tumors to grow blood vessels to bring in nutrients, metastasis is the migration of cancer cells to other parts of the body often via the blood vessels. It is often after metastasis that cancer becomes difficult to contain and treat despite surgical resection \cite{Hatzikirou2012}.
+
+For the tumor cells to perform invasion, the first step in metastasis, the migrating cell must alter cell surface interaction with its microenvironment: neighboring cells and the extra cellular matrix. Altered expression of cell adhesion molecules like cadherins, catenins and plakgoblin facilitate these changes in interactions \cite{Aktary2012}. Once in the blood stream, they are referred to as Circulating Tumor Cells (CTCs).
+
+In a recent study \cite{Aceto2014}, CTC-Chip and CTC-iChip isolation of blood from patients with breast cancer verified the existence of both Single-CTCs and CTC-Clusters. Despite being rare, these clusters demonstrated higher metastatic potential, faster disease progression and were found to originate directly from the tumor rather than aggregate in the blood.
+
+Capturing the above tumor dynamics, we attempt to use the Cellular Potts Model to simulate and investigate parameters resulting in the formation of single-CTCs and CTC-clusters.
+
 \section{Purpose and Objectives}
+t is necessary to build intuition of the factors that lead to the production of single-CTCs versus CTC-clusters and the sizes of CTC-clusters produced. Since CTC-clusters have elevated metastatic potential and lethality, understanding how they detach from the parent tumors can lead to possible therapeutic strategies.
+
+Our objective with this paper is to build a toy model that can easily be extended to account for the formation for single-CTCs and CTC-clusters.
+
 \section{Materials and Methods}
+\subsection{Cellular Potts Model (CPM)}
+\subsection{Hamiltonian Equations}
+\subsection{Monte Carlo Metropolis Algorithm}
+Each \emph{spin copy attempt} of our simulation follows the algorithm outlined below \cite{Glazier2007}:
+
+\begin{enumerate}
+  \item Choose a lattice site at random $(x,y)$ with a spin $\sigma_{select}$
+  \item Pick a trial spin $\sigma_{trial}$ from the neighbors of $(x,y)$
+  \item Calculate $H_{initial}$ using $\sigma_{select}$
+  \item Calculate $H_{final}$ using $\sigma_{trial}$
+  \item Calcualte energy change, $\Delta H = H_{final} - H_{intial}$
+  \item{ Change $\sigma_{select}$ to that of $\sigma_{trial}$ with the probability:
+  \[
+ P(\text{Spin Copy Attempt Successful}) =
+  \begin{cases}
+   1 & \text{if } \Delta H \leq 0 \\
+   \exp{(-\frac{\Delta H}{T})}       & \text{if } \Delta H > 0
+  \end{cases}
+\]
+}
+\end{enumerate}
+Here the temperature, $T$, helps to account for thermal fluctuations and adds a stochastic element to our algorithm where a cell can change its shape to a unfavorable one if it obtains some energy from the environment in the formal of a thermal kick. The higher $T$ is, the more likely the unfavorable spin copy attempt is.
+
+We define a single \emph{Monte Carlo Time Step (MCS)} as $M$ spin copy attempts, where $M$ is the size of the lattice.
+
 \section{Results}
 \section{Discussion}
 \section{Conclusion}
 
 \pagebreak
 
-\bibliographystyle{plain}
+\bibliographystyle{abbrv}
 \bibliography{396}
 
 \end{document}
