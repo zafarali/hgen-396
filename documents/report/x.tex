@@ -45,7 +45,44 @@ Our objective with this paper is to build a toy model that can easily be extende
 
 \section{Materials and Methods}
 \subsection{Cellular Potts Model (CPM)}
+The Cellular Potts Model \cite{Graner1992} is a simple, yet powerful, model was used to simulate tissue cultures.  The model is an extension of the q-Potts Model in statistical mechanics and it consists of a $M\times M$ lattice of \emph{spins}, for a biological interpretation, we consider a \emph{spin} to represent an area of \emph{cell cytoplasm}. At any location of the lattice $(x,y)$, a spin can take on a value $\sigma(x,y) = \{0,1,\cdot N\}$. A \emph{cell}, $\sigma$, is defined as a colelction of these spins; as such this restricts same-spin values to be neighbours of each other. If $\sigma(x,y) = 0$, then this region is said to be the \emph{extra cellular matrix(ECM)}. To be able to simulate different \emph{types} of cells, for example proliferating and migrating cells, we introduce $\tau(\sigma)$, which returns the \emph{type} of the cell $\sigma$. 
+%% @TODO figures to show comparison?!?!%
+
+For each position on the lattice, we define a \emph{Hamiltonian} $H$, as follows:
+\[
+H = H_{surface} + H_{area} + H_{gradients}
+\]
+\begin{itemize}
+	\item $H_{surface}$ characterizes the surface tension between a cell $\sigma$ and its neighbours.
+	\item $H_{area}$ captures the dynamics of cells being restricted to a certain size.
+	\item $H_{gradients}$ captures any external forces applied to cells due to chemical potentials and other pertubations.
+\end{itemize}
+
+The simulation then proceeds via a Monte Carlo method to flip spins in the lattice in an attempt to grow and move cells. Cells will move to minimize this Hamiltonian.
+
 \subsection{Hamiltonian Equations}
+Cells experience surface tensions when they interact with their environment, this effect is captured by the following Hamiltonian function:
+
+\begin{equation}
+H_{surface} (x,y) = \sum_{\sigma' \in \text{neighbours}~\sigma} J(\tau(\sigma), \tau(\sigma'))(1-\delta(\sigma, \sigma'))
+\end{equation}
+
+$J(\tau_1, \tau_2)$ is the cell-interaction function that returns the surface tension between two cell types and $\delta$ is the Kronecker delta function, $\delta(x,y)=\{1:~\text{if }x=y;~0:~\text{otherwise}\}$. The Kronecker delta function prevents us from considering two lattice positions of the same spin to have a surface tension since these two spins are part of the same cell.
+
+Cells cannot grow indefinitely. If cells are too big they cannot efficiently diffuse nutrients and shuttle machinery within its cell boundaries. This effect can be captured by the following Hamiltonian:
+
+\begin{equation}
+H_{area} = \sum_{\text{all spins }\sigma} (a_{current}(\sigma)-a_{target})^2 \cdot \theta(a_{target}(\sigma))
+\end{equation}
+
+Here $a(\sigma)$ is the function that returns the current and target area of the cell and $\theta(x)=\{0:~\text{if}~x\leq 0; 1:~\text{if}~x>0\}$. Here $\theta(x)$ works to prevent us from considering negative target areas where we have defined $a_{target}(\sigma_{ECM}) < 0$.
+
+Finally, we would like to add perturbations to our model. For example, we would like there to be an oxygen gradient towards a blood vessel that makes it energetically favorable for cells to move away from the main tissue. This effect can be captured with the following Hamiltonian:
+\begin{equation}
+H_{gradients}(x,y) = V(x,y)
+\end{equation}
+Where $V(x,y)$ is some potential which we can change to simulate a variety of different effects.
+
 \subsection{Monte Carlo Metropolis Algorithm}
 Each \emph{spin copy attempt} of our simulation follows the algorithm outlined below \cite{Glazier2007}:
 
@@ -65,10 +102,15 @@ Each \emph{spin copy attempt} of our simulation follows the algorithm outlined b
 \]
 }
 \end{enumerate}
-Here the temperature, $T$, helps to account for thermal fluctuations and adds a stochastic element to our algorithm where a cell can change its shape to a unfavorable one if it obtains some energy from the environment in the formal of a thermal kick. The higher $T$ is, the more likely the unfavorable spin copy attempt is.
+Here the temperature, $T$, accounts for thermal fluctuations and adds a stochastic element to our algorithm where a cell can change its shape to a unfavorable one if it obtains some energy from the environment in the formal of a thermal kick. The higher $T$ is, the more likely the unfavorable spin copy attempt is.
 
 We define a single \emph{Monte Carlo Time Step (MCS)} as $M$ spin copy attempts, where $M$ is the size of the lattice.
 
+\subsubsection{Implementation and Parameters}
+The model was implemented in the Python programming language and graphics were generated using Matplotlib\cite{matplotlib}. The parameters for simulations in this paper are shown in (table) or are otherwise mentioned. %@TODO% 
+
+\subsubsection{Simulation and Experimental Setup}
+% How were the experiments set up and methodology behind it%
 \section{Results}
 \section{Discussion}
 \section{Conclusion}
