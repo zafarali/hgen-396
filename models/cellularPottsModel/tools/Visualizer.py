@@ -2,10 +2,14 @@ import sys
 import csv
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib import rc
+
+rc('text', usetex=True)
+
 
 def Visualizer( data, N, name ):
 	# NEW COLOR BAR
-	def discrete_cmap(N, base_cmap='prism'):
+	def discrete_cmap(N, base_cmap='jet'):
 		if N == 1:
 			return plt.cm.get_cmap('prism')
 		base = plt.cm.get_cmap(base_cmap)
@@ -17,7 +21,11 @@ def Visualizer( data, N, name ):
 
 	plt.figure('Visualization of '+name)
 	plt.imshow(data, interpolation='nearest', cmap=discrete_cmap(N))
-	plt.colorbar(orientation='vertical', ticks=range(N+1))
+	cbar = plt.colorbar(orientation='vertical', ticks=range(N+1))
+	cbar.ax.set_ylabel('Cell $\sigma$')
+	plt.title('Lattice')
+	plt.xlabel('x position')
+	plt.ylabel('y position')
 	plt.draw()
 	plt.show()
 	print 'Complete'
