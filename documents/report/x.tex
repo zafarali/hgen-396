@@ -34,7 +34,7 @@ Cancer is the autonomous and uncontrolled growth of cells that forms a feed forw
 
 For the tumor cells to perform invasion, the first step in metastasis, the migrating cell must alter cell surface interaction with its microenvironment: neighboring cells and the extra cellular matrix. Altered expression of cell adhesion molecules like cadherins, catenins and plakgoblin facilitate these changes in interactions \cite{Aktary2012}. Once in the blood stream, they are referred to as Circulating Tumor Cells (CTCs).
 
-In a recent study \cite{Aceto2014}, CTC-Chip and CTC-iChip isolation of blood from patients with breast cancer verified the existence of both Single-CTCs and CTC-Clusters. Despite being rare, these clusters demonstrated higher metastatic potential, faster disease progression and were found to originate directly from the tumor rather than aggregate in the blood.
+In a recent study \cite{Aceto2014}, CTC-Chip and CTC-iChip isolation of blood from patients with breast cancer verified the existence of both Single-CTCs and CTC-Clusters. Despite being rare, these clusters demonstrated (i) higher metastatic potential, (ii) faster disease progression and were found to (iii) originate directly from the tumor rather than aggregate in the blood.
 
 Capturing the above tumor dynamics, we attempt to use the Cellular Potts Model to simulate and investigate parameters resulting in the formation of single-CTCs and CTC-clusters.
 
@@ -45,7 +45,7 @@ Our objective with this paper is to build a toy model that can easily be extende
 
 \section{Materials and Methods}
 \subsection{Cellular Potts Model (CPM)}
-The Cellular Potts Model \cite{Graner1992} is a simple, yet powerful, model was used to simulate tissue cultures.  The model is an extension of the q-Potts Model in statistical mechanics and it consists of a $M\times M$ lattice of \emph{spins}, for a biological interpretation, we consider a \emph{spin} to represent an area of \emph{cell cytoplasm}. At any location of the lattice $(x,y)$, a spin can take on a value $\sigma(x,y) = \{0,1,\cdot N\}$. A \emph{cell}, $\sigma$, is defined as a colelction of these spins; as such this restricts same-spin values to be neighbours of each other. If $\sigma(x,y) = 0$, then this region is said to be the \emph{extra cellular matrix (ECM)}. To be able to simulate different \emph{types} of cells, for example proliferating and migrating cells, we introduce $\tau(\sigma)$, which returns the \emph{type} of the cell $\sigma$. Two cells can be seen in Figure \ref{basic}.
+The Cellular Potts Model \cite{Graner1992} is a simple, yet powerful, model was used to simulate tissue cultures.  The model is an extension of the q-Potts Model in statistical mechanics. It consists of a $M\times M$ lattice of \emph{spins}. For a more biological interpretation, we can consider a \emph{spin} to represent an area of \emph{cell cytoplasm}. At any location of the lattice $(x,y)$, a spin can take on a value $\sigma(x,y) = \{0,1,\cdot N\}$. A \emph{cell}, $\sigma$, is defined as a colelction of these spins; as such this restricts same-spin values to be neighbours of each other. If $\sigma(x,y) = 0$, then this region is said to be the \emph{extra cellular matrix (ECM)}. To be able to simulate different \emph{types} of cells, for example proliferating and migrating cells, we introduce $\tau(\sigma)$, which returns the \emph{type} of the cell $\sigma$. Two cells can be seen in Figure \ref{basic}.
 %% @TODO figures to show comparison?!?!%
 
 For each position on the lattice, we define a \emph{Hamiltonian} $H$, as follows:
@@ -112,35 +112,66 @@ The model was implemented in the Python programming language and graphics were g
 
 \subsection{Simulation and Experimental Setup}
 % How were the experiments set up and methodology behind it%
+\subsubsection{Races}
+We define an $k$-CTC as a Circulating Tumor Cell Cluster containing $k$ cells, $k>0$. Thus a 1-CTC is just a single cell.
+
+An example of a race is shown in  Figure \ref{single_race}. Races between clusters were run for $t=8000MCS$, the displacement, $\Delta x$, of the clusters were calculated based on the difference between the $y$-coordinates of the leading edges of the cell before and after the race was run. This allowed us to calculate the velocities for each type of race. We also calculated coefficients for cell survival, cluster split, cluster death, and cluster joining. 
+
+Velocity was converted to \emph{relative velocity} to allow easier comparison with $1-CTCs$. Heatmaps of finishing positions are plotted to show the approximate ending positions of each k-CTC.
 \section{Results}
-\subsection{}
+\subsection{Races}
+The results of the races for the k-CTCs are shown in Table \ref{racestats}.
 \section{Discussion}
 \section{Conclusion}
 
 \pagebreak
-\section{Figures}
+\section{Tables and Figures}
 
-\begin{figure}[h!]
+\begin{figure}[h]
 	\centering
 	\includegraphics[scale=0.5]{img/basic}
 	\caption{An example of two cells in a lattice, each color represents a different cell $\sigma$. The grey area is the Extra Cellular Matrix}
 	\label{basic}
 \end{figure}
-\begin{figure}[h!]
+
+\begin{figure}[h]
 	\centering
 	\includegraphics[scale=0.5]{img/before_race_single}
 	\includegraphics[scale=0.5]{img/after_race_single}
 	\caption{A race between four cells: Top image is before the race was conducted and bottom image shows the typical positions of the cells after the race concludes ($8000MCS$)}
 	\label{single_race}
 \end{figure}
+
+\begin{table}[h]
+    \begin{tabular}{|l|l|l|l|l|}
+    \hline
+    ~                & 1-CTC   & 2-CTC (vertical) & 2-CTC (horizontal) & 3-CTC  \\ \hline
+    Total Clusters     & 44      & 44               & 45                 & 44     \\ \hline
+    Cell Survival    & 0.932  & 1.000          & 0.944             & 0.992 \\ \hline
+    Cluster Spliting & N/A     & 0.068            & 0.111             & 0.045  \\ \hline
+    Cluster Survival & 0.932$^*$ & 1.000            & 0.978             & 1.000  \\ \hline
+    Cluster Joining  & 0.114  & 0.136           & 0.022              & 0.091  \\ \hline
+    Relative Cluster Velocity$^{**}$ & 1.000       & 0.877      & 1.014     & 0.895      \\ \hline
+    \end{tabular}
+    \caption{Metrics for k-CTC races.
+    \emph{* 1-CTC cluster survival = cell survival;}
+    \emph{** Relative to 1-CTC velocity}}
+    \label{racestats}
+\end{table}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.40]{img/1CTCfinal}
+	\includegraphics[scale=0.40]{img/2CTCv-final}
+	\includegraphics[scale=0.40]{img/2CTChorzfinal}
+	\includegraphics[scale=0.40]{img/3CTC-final}
+	\caption{Heatmap showing the final positions of k-CTC races}
+	\label{race_end}
+\end{figure}
+
 \pagebreak
 
 \bibliographystyle{abbrv}
 \bibliography{396}
-
-\section{Appendix: Experimental Conditions}
-\begin{enumerate}
-	\item Race between single cells was conducted 44 times. Energies were typical to detailed in Materials and Methods. We added Y-potential $F(y)=52y$
-\end{enumerate}
 
 \end{document}
