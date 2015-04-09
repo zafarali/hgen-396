@@ -6,7 +6,7 @@
 \usepackage{wrapfig}
 \usepackage[lined,boxed,commentsnumbered]{ algorithm2e }
 \graphicspath{ { ./img/ } }
-
+\newtheorem{definition}{Definition}
 
 \begin{document}
 
@@ -94,33 +94,46 @@ Each \emph{spin copy attempt} of our simulation follows the algorithm outlined b
   \item Calcualte energy change, $\Delta H = H_{final} - H_{intial}$
   \item{ Change $\sigma_{select}$ to that of $\sigma_{trial}$ with the probability:
   \[
- P(\text{Spin Copy Attempt Successful}) =
-  \begin{cases}
-   1 & \text{if } \Delta H \leq 0 \\
-   \exp{(-\frac{\Delta H}{T})}       & \text{if } \Delta H > 0
-  \end{cases}
-\]
+ 		P(\text{Spin Copy Attempt Successful}) =
+  	\begin{cases}
+   		1 & \text{if } \Delta H \leq 0 \\
+   		\exp{(-\frac{\Delta H}{T})}       & \text{if } \Delta H > 0
+  	\end{cases}
+	\]
 }
 \end{enumerate}
 
 Here the temperature, $T$, accounts for thermal fluctuations and adds a stochastic element to our algorithm where a cell can change its shape to a unfavorable one if it obtains some energy from the environment in the formal of a thermal kick. The higher $T$ is, the more likely the unfavorable spin copy attempt is.
 
-We define a single \emph{Monte Carlo Time Step (MCS)} as $M$ spin copy attempts, where $M$ is the size of the lattice.
+\begin{definition}[Monte Carlo Time Step (MCS)] One Monte Carlo Time Step is $M$ spin copy attempts, where $M$ is the size of the lattice.
+\end{definition}
 
 \subsection{Implementation and Parameters}
 The model was implemented in the Python programming language and graphics were generated using Matplotlib\cite{matplotlib}. The parameters for simulations in this paper are shown in (table) or are otherwise mentioned. %@TODO% 
 
 \subsection{Simulation and Experimental Setup}
 % How were the experiments set up and methodology behind it%
+\begin{definition}[$k$-CTC]
+A Circulating Tumor Cell Cluster containing $k$ cells, $8>k>0$.
+\end{definition}
+
+Experiments were set up to test the feasability of the model. We would like to compare k-CTCs of different sizes (note that a 1-CTC is just a single cell). To do this we run races between different k-CTCs and asses different metrics. We also simulate forces on tissues in an attempt to produce k-CTCs from it.
+
 \subsubsection{Races}
-We define an $k$-CTC as a Circulating Tumor Cell Cluster containing $k$ cells, $k>0$. Thus a 1-CTC is just a single cell.
+An example of a race is shown in  Figure \ref{single_race}. Races between clusters were run for $t=8000MCS$ in a constant y-directional force. The displacement, $\Delta x$, of the clusters were calculated based on the difference between the $y$-coordinates of the leading edges of the cell before and after the race was run. This allowed us to calculate the velocities for each type of race. We also calculated coefficients for cell survival, cluster split, cluster death, and cluster joining. 
 
-An example of a race is shown in  Figure \ref{single_race}. Races between clusters were run for $t=8000MCS$, the displacement, $\Delta x$, of the clusters were calculated based on the difference between the $y$-coordinates of the leading edges of the cell before and after the race was run. This allowed us to calculate the velocities for each type of race. We also calculated coefficients for cell survival, cluster split, cluster death, and cluster joining. 
+Different orientations of clusters were considered in the $k=2$ case \ref{race_start} to allow comparison.
 
-Velocity was converted to \emph{relative velocity} to allow easier comparison with $1-CTCs$. Heatmaps of finishing positions are plotted to show the approximate ending positions of each k-CTC.
+Velocity was converted to \emph{relative velocity} to allow easier comparison with $1-CTCs$. Heatmaps (Figure \ref{race_end}) of finishing positions are plotted to show the average ending positions of each k-CTC.
+
+%% RESULTS
+
 \section{Results}
 \subsection{Races}
-The results of the races for the k-CTCs are shown in Table \ref{racestats}.
+The results of the races for the k-CTCs are shown in Table \ref{racestats}. 
+
+
+%% DISCUSSIONS
 \section{Discussion}
 \section{Conclusion}
 
@@ -136,28 +149,40 @@ The results of the races for the k-CTCs are shown in Table \ref{racestats}.
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[scale=0.5]{img/before_race_single}
-	\includegraphics[scale=0.5]{img/after_race_single}
-	\caption{A race between four cells: Top image is before the race was conducted and bottom image shows the typical positions of the cells after the race concludes ($8000MCS$)}
+	\includegraphics[scale=0.40]{img/before_race_single}
+	\includegraphics[scale=0.40]{img/after_race_single}
+	\caption{A race between four cells: Starting positions (left) before the race is conducted and the typical positions (right) of the cells after the race concludes ($8000MCS$)}
 	\label{single_race}
 \end{figure}
 
 \begin{table}[h]
-    \begin{tabular}{|l|l|l|l|l|}
+    \begin{tabular}{|l|l|l|l|l|l|}
     \hline
-    ~                & 1-CTC   & 2-CTC (vertical) & 2-CTC (horizontal) & 3-CTC  \\ \hline
-    Total Clusters     & 44      & 44               & 45                 & 44     \\ \hline
-    Cell Survival    & 0.932  & 1.000          & 0.944             & 0.992 \\ \hline
-    Cluster Spliting & N/A     & 0.068            & 0.111             & 0.045  \\ \hline
-    Cluster Survival & 0.932$^*$ & 1.000            & 0.978             & 1.000  \\ \hline
-    Cluster Joining  & 0.114  & 0.136           & 0.022              & 0.091  \\ \hline
-    Relative Cluster Velocity$^{**}$ & 1.000       & 0.877      & 1.014     & 0.895      \\ \hline
+    ~                & 1-CTC   & 2-CTC (vertical) & 2-CTC (horizontal) & 3-CTC & 4-CTC \\ \hline
+    Total Clusters   & 44      & 44               & 45                 & 44 & 44  \\ \hline
+    Total Cells 		 & 44			 & 88							& 90									& 132 & 176 \\ \hline
+    Cell Survival    & 0.932  & 1.000         	 & 0.944             & 0.992 & 0.994 \\ \hline
+    Cluster Spliting & N/A     & 0.068            & 0.111             & 0.045 & 0.682 \\ \hline
+    Cluster Survival & 0.932$^*$ & 1.000            & 0.978             & 1.000 & 1.000 \\ \hline
+    Cluster Joining  & 0.114  & 0.136           & 0.022              & 0.091 & 0.136 \\ \hline
+    Relative Cluster Velocity$^{**}$ & 1.000       & 0.877      & 1.014     & 0.895  & 0.895 \\ \hline
     \end{tabular}
     \caption{Metrics for k-CTC races.
-    \emph{* 1-CTC cluster survival = cell survival;}
+    \emph{* 1-CTC cluster survival = cell survival}
     \emph{** Relative to 1-CTC velocity}}
     \label{racestats}
 \end{table}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.20]{img/1ctc-start}
+	\includegraphics[scale=0.20]{img/2horz-start}
+	\includegraphics[scale=0.20]{img/2vert-start}
+	\includegraphics[scale=0.20]{img/3ctc-start}
+	\includegraphics[scale=0.20]{img/4ctc-start}
+	\caption{Starting positions of 1-CTC, 2-CTC (horizontal), 2-CTC (vertical), 3-CTC and 4-CTC respectively}
+	\label{race_start}
+\end{figure}
 
 \begin{figure}[h]
 	\centering
@@ -165,7 +190,8 @@ The results of the races for the k-CTCs are shown in Table \ref{racestats}.
 	\includegraphics[scale=0.40]{img/2CTCv-final}
 	\includegraphics[scale=0.40]{img/2CTChorzfinal}
 	\includegraphics[scale=0.40]{img/3CTC-final}
-	\caption{Heatmap showing the final positions of k-CTC races}
+	\includegraphics[scale=0.40]{img/4CTC-final}
+	\caption{Heatmap showing the final positions of k-CTC races. 1-CTCs (Top left), 2-CTC-horizontal (Bottom left), 2-CTC-vertical (Top right), 3-CTCs (Bottom right) and 4-CTCs (Bottom). The average distances travelled of the leading edge are: 34.2, 35.1, 30.0, 30.6 and 30.2 respectively. }
 	\label{race_end}
 \end{figure}
 
