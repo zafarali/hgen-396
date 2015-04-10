@@ -111,33 +111,41 @@ Here the temperature, $T$, accounts for thermal fluctuations and adds a stochast
 \subsection{Implementation and Parameters}
 The model was implemented in the Python programming language and graphics were generated using Matplotlib\cite{matplotlib}. The parameters for simulations in this paper are shown in (table) or are otherwise mentioned. %@TODO% 
 
+Performance characteristics are measured in 
+
 \subsection{Simulation and Experimental Setup}
 % How were the experiments set up and methodology behind it%
 \begin{definition}[$k$-CTC]
-A Circulating Tumor Cell Cluster containing $k$ cells, $8>k>0$.
+A Circulating Tumor Cell Cluster containing $k$ cells, $15>k>0$.
 \end{definition}
 
-Experiments were set up to test the feasability of the model. We would like to compare $k$-CTCs of different sizes (note that a $1$-CTC is just a single cell). To do this we run races between different $k$-CTCs and compare metrics. We also simulate forces on tissues in an attempt to produce $k$-CTCs from it.
+The main focus of the project is to ensure that our model can make realistic predictions. Experiments were set up to test the feasability of the model and to see if it solves trivial cases and conforms to intuition.
 
-\subsubsection{Races}
-An example of a race is shown in  Figure \ref{single_race}. Races between clusters of different sizes were run for $t=8000MCS$ with a constant y-directional force. The displacement, $\Delta x$, of the clusters were calculated based on the difference between the $y$-coordinates of the leading edges of the cell before and after the race was run. This allowed us to calculate their average velocities. Velocity was converted to \emph{relative velocity} to allow easier comparison with $1$-CTCs. Heatmaps (Figure \ref{race_end}) of finishing positions are plotted to show the average ending positions of each $k$-CTC. We also calculated coefficients for cell survival, cluster split, cluster death, and cluster joining. 
-
-Different orientations of clusters were considered in the $k=2$ case (Figure \ref{race_start}) to investigate how orientation would affect velocity and survival.
-
+We then set up $k$-CTCs for $k>0$ in a gradient and measured \emph{velocity} of their migration and other characteristics such as \emph{splitting frequency}.
 
 %% RESULTS
-
 \section{Results}
-The results of the races for the $k$-CTCs are shown in Table \ref{racestats} for $k=\{1,2,3,4\}$.
-\subsection{}
- notice that $2$-CTCs can be oriented vertically and horizontally to observe their differences.
+\subsection{The CPM Performs in Reasonable Time Frames}
+We ran the CPM for sizes $M=\{1, \ldots , 20\}$ with $M^2$ cells for $t=1000$MCS. Simulations were run on a MacBook Pro (mid-2013) with Mac OS X Yosemite ($10.10$) with $2.5$GHz Intel Core i$5$ Processor and $4$GB of $1600$MHz RAM.
 
+\subsection{ The CPM Solves Single Spin and Single Cell Situations According to Expectations }
+To test the \emph{death frequency} of a single spin cell, we run a lattice with a single spin for 250MCS. In 250 simulations with the parameters $a_{target}(\sigma(1))=20$ and $J(1,1)=1, J(1,0)=5$ we observe 48 death events ($19.2\%$). Final surviving cells had a mean area of $\mu = 17.99$ with a variance of $\sigma^2 6.39$ (Figure \ref{cellareas}). %TODO%
 
+\subsection{Comparing $k$-CTCs for $k>0$ ...} %TODO%
 
+\subsection{Tissues Can be Induced to Split in Two}
 
 %% DISCUSSIONS
 \section{Discussion}
+
+\subsection{Model Feasibility}
+%% Is this model feasible to what we are trying to do?%
+
+\subsection{$k$-CTC Velocity is inversely proportional to $\sqrt{W}$ }
+% Simons conjecture %
+
 \section{Conclusion}
+
 
 \pagebreak
 \section{Tables and Figures}
@@ -151,27 +159,29 @@ The results of the races for the $k$-CTCs are shown in Table \ref{racestats} for
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[scale=0.40]{img/before_race_single}
-	\includegraphics[scale=0.40]{img/after_race_single}
-	\caption{A race between four cells: Starting positions (left) before the race is conducted and the typical positions (right) of the cells after the race concludes ($8000MCS$)}
-	\label{single_race}
+	\includegraphics[scale=0.5]{img/cellareas}
+	\caption{The distribution of final cell areas for $N=250$ simulations of a single-spin cell. ($\mu = 17.99, \sigma^2=6.39$) }
+	\label{cellareas}
 \end{figure}
 
+
 \begin{table}[h]
-    \begin{tabular}{|l|l|l|l|l|l|}
+    \begin{tabular}{|l|l|l|l|l|l|l|l|}
     \hline
-    ~                & $1$-CTC   & $2$-CTC (vertical) & $2$-CTC (horizontal) & $3$-CTC & $4$-CTC \\ \hline
-    Total Clusters   & 44      & 44           & 45          & 44 & 44  \\ \hline
-    Total Cells 		 & 44			 & 88					& 90						& 132 & 176 \\ \hline
-    Cell Survival    & 0.932  & 1.000        & 0.944        & 0.992 & 0.994 \\ \hline
-    Cluster Spliting & N/A     & 0.068       & 0.111        & 0.045 & 0.068 \\ \hline
-    Cluster Survival & 0.932$^*$ & 1.000      & 0.978       & 1.000 & 1.000 \\ \hline
-    Cluster Joining  & 0.114  & 0.136        & 0.022        & 0.091 & 0.159 \\ \hline
-    Relative Cluster Velocity$^{**}$ & 1.000  & 0.877       & 1.014     & 0.895  & 0.895 \\ \hline
+    ~                & $1$-CTC   & $2$-CTC (v) & $2$-CTC (h) & $3$-CTC & $4$-CTC (b) & $4$-CTC (d) & $6$-CTC \\ \hline
+    Total Clusters   & 44  & 44  & 45  & 44 & 44 & 44 & 20  \\ \hline
+    Total Cells 		 & 44 & 88 & 90 & 132 & 176 & 176 & 40 \\ \hline
+    Cell Survival    & 0.932  & 1.000 & 0.944 & 0.992 & 0.994 & 0.994 & 0.992 \\ \hline
+    Cluster Spliting & N/A & 0.068 & 0.111 & 0.045 & 0.068 & 0.023 & 0.000 \\ \hline
+    Cluster Survival & 0.932 & 1.000 & 0.978 & 1.000 & 1.000 & 1.000 & 1.000 \\ \hline
+    Cluster Velocity$^{**}$ & 1.000  & 0.877 & 1.014 & 0.895  & 0.895 & 0.896 & 0.889 \\ \hline
     \end{tabular}
     \caption{Metrics for $k$-CTC races.
-    \emph{* $1$-CTC cluster survival = cell survival}
-    \emph{** Relative to $1$-CTC velocity}}
+    \emph{ v = vertical orientation; }
+    \emph{ h = horizontal orientation; }
+    \emph{ d = diamond orientation; }
+    \emph{ b = block orientation; }
+    \emph{** Relative to $1$-CTC velocity; }}
     \label{racestats}
 \end{table}
 
@@ -182,57 +192,17 @@ The results of the races for the $k$-CTCs are shown in Table \ref{racestats} for
 	\includegraphics[scale=0.20]{img/2horz-start}
 	\includegraphics[scale=0.20]{img/3ctc-start}
 	\includegraphics[scale=0.20]{img/4ctc-start}
-	\caption{Starting positions of $1$-CTC, $2$-CTC (vertical), $2$-CTC (horizontal), $3$-CTC and $4$-CTC respectively}
+	\includegraphics[scale=0.20]{img/4ctc-d-start}
+	\includegraphics[scale=0.20]{img/6ctc-start}
+	\caption{Starting positions of $1$-CTC, $2$-CTC (v), $2$-CTC (h), $3$-CTC, $4$-CTC (b), $4$-CTC (d) and $6$-CTCs respectively}
 	\label{race_start}
-\end{figure}
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[scale=0.40]{img/1CTCfinal}
-	\includegraphics[scale=0.40]{img/2CTCv-final}
-	\includegraphics[scale=0.40]{img/2CTChorzfinal}
-	\includegraphics[scale=0.40]{img/3CTC-final}
-	\includegraphics[scale=0.40]{img/4CTC-final}
-	\caption{Heatmap showing the final positions of $k$-CTC races. $1$-CTCs (Top left), $2$-CTC-horizontal (Bottom left), $2$-CTC-vertical (Top right), $3$-CTCs (Bottom right) and $4$-CTCs (Bottom). The average distances travelled of the leading edge are: 34.2, 35.1, 30.0, 30.6 and 30.2 respectively. }
-	\label{race_end}
-\end{figure}
-
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[scale=0.40]{img/1CTC-dead}
-	\includegraphics[scale=0.40]{img/1CTC-join}
-	\caption{Some results of a $1$-CTC race: (Left) A cell died while moving through the ECM, (Right) Two $1$-CTCs to join to make a $2$-CTC. ($8000MCS$)}
-	\label{single_results}
-\end{figure}
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[scale=0.40]{img/2CTC-split}
-	\includegraphics[scale=0.40]{img/2CTC-join}
-	\caption{Some results of a $2$-CTC (vertical) race: (Left) A $2$-CTC splits into two $1$-CTCs, (Right) Observation of simultaneous splitting and joining events. ($8000MCS$)}
-	\label{2CTC-horz}
-\end{figure}
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[scale=0.40]{img/2CTCh-dead}
-	\includegraphics[scale=0.40]{img/2CTCh-split}
-	\caption{Some results of a $2$-CTC (horizontal) race: (Left) Complete death of a $2$-CTC, (Right) Splitting of a $2$-CTC. ($8000MCS$)}
-	\label{2CTC-vert}
-\end{figure}
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[scale=0.40]{img/3CTC-join}
-	\includegraphics[scale=0.40]{img/3CTC-split}
-	\caption{Some results of a $3$-CTC race: (Left) Joining of two $3$-CTCs, (Right) Splitting of a $3$-CTC. ($8000MCS$)}
-	\label{3CTC}
 \end{figure}
 
 \newpage
 
 \bibliographystyle{abbrv}
 \bibliography{396}
+
+\section{Appendix: Calculations}
 
 \end{document}
