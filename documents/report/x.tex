@@ -30,7 +30,7 @@ Using an implementation of the Cellular Potts Model, we attempt to simulate the 
 \end{abstract}
 
 \section{Introduction}
-Cancer is the autonomous and uncontrolled growth of cells that forms a feed forward system to reinforce the tumors’ existence \cite{hallmarks}. However, for cancerous cells to keep growing and overcome the limitations of diffusion of nutrients, tumors have two solutions: angiogenesis and metastasis. While angiogenesis permits tumors to grow blood vessels to bring in nutrients, metastasis is the migration of cancer cells to other parts of the body often via the blood vessels. It is often after metastasis that cancer becomes difficult to contain and treat despite surgical resection \cite{Hatzikirou2012}.
+Cancer is the autonomous and uncontrolled growth of cells that forms a feed forward system to reinforce the tumors’ existence \cite{hallmarks}. However, for cancerous cells to keep growing and overcome the limitations of diffusion of nutrients, tumors have two solutions: angiogenesis and metastasis. While angiogenesis permits tumors to grow blood vessels and bring in nutrients, metastasis is the migration of cancer cells to other parts of the body often via the blood vessels. It is often after metastasis that cancer becomes difficult to contain and treat despite surgical resection \cite{Hatzikirou2012}.
 
 For the tumor cells to perform invasion, the first step in metastasis, the migrating cell must alter cell surface interaction with its microenvironment: neighboring cells and the extra cellular matrix. Altered expression of cell adhesion molecules like cadherins, catenins and plakgoblin facilitate these changes in interactions \cite{Aktary2012}. Once in the blood stream, they are referred to as Circulating Tumor Cells (CTCs).
 
@@ -109,9 +109,11 @@ Here the temperature, $T$, accounts for thermal fluctuations and adds a stochast
 \end{definition}
 
 \subsection{Implementation and Parameters}
-The model was implemented in the Python programming language and graphics were generated using Matplotlib\cite{matplotlib}. The parameters for simulations in this paper are shown in (table) or are otherwise mentioned. %@TODO% 
+The model is implemented in the Python programming language and graphics are generated using Matplotlib\cite{matplotlib}. The parameters for simulations are mentioned.
 
-Performance characteristics are measured in 
+Performance characteristics were measured on an Apple MacBook Pro (mid-2013) running Mac OS X Yosemite ($10.10$) with $2.5$GHz Intel Core i$5$ Processor and $4$GB of $1600$MHz RAM.
+
+All code can be found on http://www.github.com/zafarali/hgen-396/
 
 \subsection{Simulation and Experimental Setup}
 % How were the experiments set up and methodology behind it%
@@ -121,15 +123,20 @@ A Circulating Tumor Cell Cluster containing $k$ cells, $15>k>0$.
 
 The main focus of the project is to ensure that our model can make realistic predictions. Experiments were set up to test the feasability of the model and to see if it solves trivial cases and conforms to intuition.
 
-We then set up $k$-CTCs for $k>0$ in a gradient and measured \emph{velocity} of their migration and other characteristics such as \emph{splitting frequency}.
+We first determine the performance of our model whether it completes in reasonable time frames. We ran the CPM for sizes $M=\{1, \ldots , 20\}$ with $N=$floor$(\frac{M^2}{25})$ cells for $t=500$MCS to allow for worst case scenario of using every possible lattice position (parameters: $a_{target}(\sigma(1))=25$ and $J(1,1)=1, J(1,0)=5$). We take averages over three runs using the \%timeit function available in iPython.
+
+Next, we test multiple single-spin cells to determine \emph{death frequency}. We expect that $14.9\%$ of cells will die within the first spin copy attempt. We run this experiment for $250$MCS to give cells time to expand (parameters: $a_{target}(\sigma(1))=20$ and $J(1,1)=1, J(1,0)=5$).
+From this data, \emph{death frequency} was measured and we determine if cells grow to their $a_{target}$.
+
+We then set up $k$-CTCs for $k>0$ in a gradient and measure \emph{velocity} of their migration and other characteristics such as \emph{splitting frequency}.
 
 %% RESULTS
 \section{Results}
 \subsection{The CPM Performs in Reasonable Time Frames}
-We ran the CPM for sizes $M=\{1, \ldots , 20\}$ with $M^2$ cells for $t=1000$MCS. Simulations were run on a MacBook Pro (mid-2013) with Mac OS X Yosemite ($10.10$) with $2.5$GHz Intel Core i$5$ Processor and $4$GB of $1600$MHz RAM.
+Running time of the simulations showed an overall increasing trend (Figure \ref{runningtime}) as $M$ is increased. A $40\times40$ lattice with $64$ cells takes an average of $57.4$ seconds. 
 
-\subsection{ The CPM Solves Single Spin and Single Cell Situations According to Expectations }
-To test the \emph{death frequency} of a single spin cell, we run a lattice with a single spin for 250MCS. In 250 simulations with the parameters $a_{target}(\sigma(1))=20$ and $J(1,1)=1, J(1,0)=5$ we observe 48 death events ($19.2\%$). Final surviving cells had a mean area of $\mu = 17.99$ with a variance of $\sigma^2 6.39$ (Figure \ref{cellareas}). %TODO%
+\subsection{The CPM Solves Single Spin and Single Cell Situations According to Expectations }
+We observe 48 death events ($19.2\%$). At the end of the simulation surviving cells had a mean area of $\mu = 17.99$ with a variance of $\sigma^2 = 6.39$ (Figure \ref{cellareas}). %TODO%
 
 \subsection{Comparing $k$-CTCs for $k>0$ ...} %TODO%
 
@@ -159,31 +166,17 @@ To test the \emph{death frequency} of a single spin cell, we run a lattice with 
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[scale=0.5]{img/cellareas}
-	\caption{The distribution of final cell areas for $N=250$ simulations of a single-spin cell. ($\mu = 17.99, \sigma^2=6.39$) }
-	\label{cellareas}
+	\includegraphics[scale=0.5]{img/runningtime}
+	\caption{Running time in  for lattice size, $M =\{1,\ldots, 20\}$ and number of cells, $N=\frac{M^2}{25}$ for each simulation (average of three runs).}
+	\label{runningtime}
 \end{figure}
 
-
-\begin{table}[h]
-    \begin{tabular}{|l|l|l|l|l|l|l|l|}
-    \hline
-    ~                & $1$-CTC   & $2$-CTC (v) & $2$-CTC (h) & $3$-CTC & $4$-CTC (b) & $4$-CTC (d) & $6$-CTC \\ \hline
-    Total Clusters   & 44  & 44  & 45  & 44 & 44 & 44 & 20  \\ \hline
-    Total Cells 		 & 44 & 88 & 90 & 132 & 176 & 176 & 40 \\ \hline
-    Cell Survival    & 0.932  & 1.000 & 0.944 & 0.992 & 0.994 & 0.994 & 0.992 \\ \hline
-    Cluster Spliting & N/A & 0.068 & 0.111 & 0.045 & 0.068 & 0.023 & 0.000 \\ \hline
-    Cluster Survival & 0.932 & 1.000 & 0.978 & 1.000 & 1.000 & 1.000 & 1.000 \\ \hline
-    Cluster Velocity$^{**}$ & 1.000  & 0.877 & 1.014 & 0.895  & 0.895 & 0.896 & 0.889 \\ \hline
-    \end{tabular}
-    \caption{Metrics for $k$-CTC races.
-    \emph{ v = vertical orientation; }
-    \emph{ h = horizontal orientation; }
-    \emph{ d = diamond orientation; }
-    \emph{ b = block orientation; }
-    \emph{** Relative to $1$-CTC velocity; }}
-    \label{racestats}
-\end{table}
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.5]{img/cellareas}
+	\caption{The distribution of final cell areas for $N=250$ simulations of a single-spin cell after $250$MCS. ($\mu = 17.99, \sigma^2=6.39$) }
+	\label{cellareas}
+\end{figure}
 
 \begin{figure}[h]
 	\centering
