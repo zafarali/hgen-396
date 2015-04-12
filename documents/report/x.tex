@@ -8,29 +8,33 @@
 \graphicspath{ { ./img/ } }
 \newtheorem{definition}{Definition}
 
+\usepackage{setspace}
+\doublespacing
+
 \begin{document}
 
 \begin{titlepage}
 	\begin{center}
 		~\\[2.5cm]
 		{\Huge Simulating Detachment of Tumor Cell Clusters}\\[1.5cm]
-		{\Large HGEN 396: Human Genetics Research Project}\\[7.5cm]
+		{\Large HGEN 396: Human Genetics Research Project}\\[7.0cm]
 		\emph{Student:}\\
 		Mr. Zafarali Ahmed (260560472)\\[1.0cm]
 		\emph{Supervisor:}\\
 		Dr. Simon Gravel\\[1.0cm]
 		\emph{Submission Date:}\\
-		\today\\
-		\emph{McGill University}
+		\today\\[1.0cm]
+		\emph{Location:}\\
+		McGill University
 	\end{center}
 \end{titlepage}
 
 \begin{abstract}
-Using an implementation of the Cellular Potts Model, we attempt to simulate the detachment of a tumor cell from a tumor. Blood of patients with cancer contain Circulating Tumor Cells (CTCs) and recent advances in capture technology find that CTCs exist in single cells as well as clusters \cite{Aceto2014}. Studies have hypothesized their relative contributions to metastasis, including the controversial role of plakoglobin. 
+Blood of patients with cancer contain Circulating Tumor Cells (CTCs). Recent advances in capture technology find that CTCs exist in single cells as well as clusters \cite{Aceto2014}. Studies have hypothesized their relative contributions to metastasis, including the controversial role of plakoglobin. We implement the Cellular Potts Model to simulate the detachment of a tumor cell from a tumor. This paper works to test the feasability of such a model and if it can be used to make theoretical predictions.
 \end{abstract}
 
 \section{Introduction}
-Cancer is the autonomous and uncontrolled growth of cells that forms a feed forward system to reinforce the tumors’ existence \cite{hallmarks}. However, for cancerous cells to keep growing and overcome the limitations of diffusion of nutrients, tumors have two solutions: angiogenesis and metastasis. While angiogenesis permits tumors to grow blood vessels and bring in nutrients, metastasis is the migration of cancer cells to other parts of the body often via the blood vessels. It is often after metastasis that cancer becomes difficult to contain and treat despite surgical resection \cite{Hatzikirou2012}.
+Cancer is the autonomous and uncontrolled growth of cells that forms a feed forward system to reinforce the tumors’ existence \cite{hallmarks}. Cancer originates from accumulated mutations in tumor supressor genes, proto-onco genes and DNA repart genes. These mutations hinder the cells' abillity to regulate cell cycles and they divide uncontrollably. However, for cancerous cells to keep growing and overcome the limitations due to diffusion of nutrients, tumors have two solutions: angiogenesis and metastasis. While angiogenesis permits tumors to grow blood vessels and bring in nutrients, metastasis is the migration of cancer cells to other parts of the body often via the blood vessels. It is often after metastasis that cancer becomes difficult to contain and treat despite surgical resection \cite{Hatzikirou2012}.
 
 For the tumor cells to perform invasion, the first step in metastasis, the migrating cell must alter cell surface interaction with its microenvironment: neighboring cells and the extra cellular matrix. Altered expression of cell adhesion molecules like cadherins, catenins and plakgoblin facilitate these changes in interactions \cite{Aktary2012}. Once in the blood stream, they are referred to as Circulating Tumor Cells (CTCs).
 
@@ -39,9 +43,9 @@ In a recent study \cite{Aceto2014}, CTC-Chip and CTC-iChip isolation of blood fr
 Capturing the above tumor dynamics, we attempt to use the Cellular Potts Model to simulate and investigate parameters resulting in the formation of single-CTCs and CTC-clusters.
 
 \section{Purpose and Objectives}
-It is necessary to build intuition of the factors that lead to the production of single-CTCs versus CTC-clusters and the sizes of CTC-clusters produced. Since CTC-clusters have elevated metastatic potential and lethality, understanding how they detach from the parent tumors can lead to possible therapeutic strategies.
+Since metastasis is the \emph{point of no return} for most patients, it is necessary to build intuition of the factors that lead to the production of single-CTCs versus CTC-clusters and the sizes of CTC-clusters produced. Since CTC-clusters have elevated metastatic potential and lethality, understanding how they detach from the parent tumors can lead to possible therapeutic strategies.
 
-Our objective with this paper is to build a toy model that can easily be extended to account for the formation for single-CTCs and CTC-clusters.
+Our objective with this paper is to build and test the feasibility of a toy model that can easily be extended to account for the formation for single-CTCs and CTC-clusters. This toy model can eventually be used to make theoretical predictions.
 
 \section{Materials and Methods}
 \subsection{Cellular Potts Model (CPM)}
@@ -75,7 +79,7 @@ Cells cannot grow indefinitely. If cells are too big they cannot efficiently dif
 	H_{area} = \sum_{\text{all spins }\sigma} (a_{current}(\sigma)-a_{target})^2 \cdot \theta(a_{target}(\sigma))
 \end{equation}
 
-Here $a(\sigma)$ is the function that returns the current and target area of the cell and $\theta(x)=\{0:~\text{if}~x\leq 0; 1:~\text{if}~x>0\}$. Here $\theta(x)$ works to prevent us from considering negative target areas where we have defined $a_{target}(\sigma_{ECM}) < 0$.
+Here $a_{current}(\sigma)$ and $a_{target}(\sigma)$ are functions that return the current and target area of the cell respectively, and $\theta(x)=\{0:~\text{if}~x\leq 0; 1:~\text{if}~x>0\}$. Here $\theta(x)$ works to prevent us from considering negative target areas. This is essential because we have defined $a_{target}(\sigma_{ECM}) < 0$.
 
 Finally, we would like to add perturbations to our model. For example, we would like there to be an oxygen gradient towards a blood vessel that makes it energetically favorable for cells to move away from the main tissue. This effect can be captured with the following Hamiltonian:
 \begin{equation}
@@ -109,11 +113,11 @@ Here the temperature, $T$, accounts for thermal fluctuations and adds a stochast
 \end{definition}
 
 \subsection{Implementation and Parameters}
-The model is implemented in the Python programming language and graphics are generated using Matplotlib\cite{matplotlib}. The parameters for simulations are mentioned.
+The model is implemented in the Python programming language and graphics are generated using Matplotlib\cite{matplotlib}. The parameters for all simulations are mentioned.
 
 Performance characteristics were measured on an Apple MacBook Pro (mid-2013) running Mac OS X Yosemite ($10.10$) with $2.5$GHz Intel Core i$5$ Processor and $4$GB of $1600$MHz RAM.
 
-All code can be found on http://www.github.com/zafarali/hgen-396/
+All code can be found on http://www.github.com/zafarali/hgen-396/ under \emph{Cellular Potts Model}
 
 \subsection{Simulation and Experimental Setup}
 % How were the experiments set up and methodology behind it%
@@ -121,28 +125,35 @@ All code can be found on http://www.github.com/zafarali/hgen-396/
 A Circulating Tumor Cell Cluster containing $k$ cells, $15>k>0$.
 \end{definition}
 
-The main focus of the project is to ensure that our model can make realistic predictions. Experiments were set up to test the feasability of the model and to see if it solves trivial cases and conforms to intuition.
+The main focus of the project is to ensure that our model can make realistic predictions. Keeping this in mind experiments were set up to test the feasability of the model and to see if it solves trivial cases and conforms to intuition. To do this, we first determine the performance of our model to check if it completes in reasonable time frames and will allow us to run larger experiments in the future. 
 
-We first determine the performance of our model whether it completes in reasonable time frames. We ran the CPM for sizes $M=\{1, \ldots , 20\}$ with $N=$floor$(\frac{M^2}{25})$ cells for $t=500$MCS to allow for worst case scenario of using every possible lattice position (parameters: $a_{target}(\sigma(1))=25$ and $J(1,1)=1, J(1,0)=5$). We take averages over three runs using the \%timeit function available in iPython.
+To check trivial cases, we run multiple single-spin cells to determine \emph{death frequency}. We expect that $15\%$ of cells will die within the first spin copy attempt. We run this experiment for $250$MCS to give cells time to expand (parameters: $a_{target}(\sigma(1))=20$ and $J(1,1)=1, J(1,0)=5$). From this data, \emph{death frequency} is measured and we can determine if cells grow to their $a_{target}$.
 
-Next, we test multiple single-spin cells to determine \emph{death frequency}. We expect that $14.9\%$ of cells will die within the first spin copy attempt. We run this experiment for $250$MCS to give cells time to expand (parameters: $a_{target}(\sigma(1))=20$ and $J(1,1)=1, J(1,0)=5$).
-From this data, \emph{death frequency} was measured and we determine if cells grow to their $a_{target}$.
+$k$-CTCs for $k>0$ were subject to a constant force in a $100\times100$ lattice for $10000$MCS. The resulting end-state is used to measure \emph{velocity} of their migration and other characteristics such as \emph{splitting frequency} and \emph{survival}.
 
-We then set up $k$-CTCs for $k>0$ in a gradient and measure \emph{velocity} of their migration and other characteristics such as \emph{splitting frequency}.
+Our final experiment attempted to separate a single tissue mass into two, in the presence of forces pulling on opposite ends of the lattice.
 
 %% RESULTS
 \section{Results}
 \subsection{The CPM Performs in Reasonable Time Frames}
-Running time of the simulations showed an overall increasing trend (Figure \ref{runningtime}) as $M$ is increased. A $40\times40$ lattice with $64$ cells takes an average of $57.4$ seconds. 
+We ran the CPM for sizes $M=\{1, \ldots , 20\}$ with $N=\text{floor}(\frac{M^2}{25})$ cells for $t=500$MCS to allow simulate the worst case scenario of using every possible lattice position (parameters: $a_{target}(\sigma(1))=25$ and $J(1,1)=1, J(1,0)=5$). We take averages over three runs using the \%timeit function available in iPython.
 
-\subsection{The CPM Solves Single Spin and Single Cell Situations According to Expectations }
-We observe 48 death events ($19.2\%$). At the end of the simulation surviving cells had a mean area of $\mu = 17.99$ with a variance of $\sigma^2 = 6.39$ (Figure \ref{cellareas}). %TODO%
+Running time of the simulations showed an overall increasing trend (Figure \ref{runningtime}) as $M$ is increased. A $40\times40$ lattice with $64$ cells takes an average of $57.4$ seconds. This time is reasonable because if we extrapolate this trend, for simulations of $t=10,000$MCS, our simulations will complete on the order of $10$ minutes.
 
-\subsection{Comparing $k$-CTCs for $k>0$ ...} %TODO%
-\ref{racestats}
+\subsection{The CPM Solves Single Spin Cell Situations According to Expectations}
+When running single-spin cells in a lattice for $250$MCS, we observe 48 death events ($17.6\%$). The difference between expected death events and observed death events is $2.6\%$. The extra $2.6\%$ of cells that died can be accounted for by the cells that did not die within the first \emph{spin copy attempt}. This confirms our trust in the implementation of the the model.
+
+At the end of the simulations, surviving cells had a mean area of $\mu = 17.99$ with a variance of $\sigma^2 = 6.39$ (Figure \ref{cellareas}). This is within $a_{target}(\sigma)=20$ and we can conclude that our area constraint works as expected. 
+
+By the design of our model, it is impossible for cells to spontaneously appear. This is our final expectation of the model.
+
+\subsection{Comparing $k$-CTCs for $10 \geq k\geq1$} %TODO%
+$k$-CTCs were set up in a $100\times100$ lattice as shown in Figure \ref{racestart}. Simulations were run for $10,000$MCS, $10$ times for each value of $k$. The results are summarized in Table \ref{racestats}. For $k>2$, Mean Velocity stabilized at $25.09\times10^-3\text{MCS}^{-1}$. For $k\leq3$, the mean velocity is lower. This can be explained by the fact that for $k\geq3$, $k$-CTCs tend to move in unison while for $k=\{1,2\}$ $k$-CTCs tend to split and move at more unpredictable directions. We plot heatmaps (Figure \ref{heatmap}) of the ending positions to confirm this reasoning. $1$ and $2$-CTCs tend to have a wider range of ending positions for their cells while $k\geq3$ tend to have simillar ending configurations.
+
+We also observe that the highest \emph{splitting frequency} is when $k=2$. When $k>3$ we see this splitting frequency drop very sharply. This suggests that larger $k$-CTCs do not tend to split as easily as their smaller counterparts. This makes sense because in larger $k$-CTCs, an escaping cell would need to break interactions with many more cells than just $1$ other cell like in the $k=2$ case.
 
 \subsection{Tissues Can be Induced to Split in Two}
-
+A discontinous force (Figure \ref{forceapplied}) was applied to the lattice of $N=150$ cells as shown in Figure \ref{nebula} (Top left) in an attempt to split the mass of tissues into two. The results of this experiment are summarized at increasing timesteps in Figure \ref{nebula}. It is clear that we infact can split tissues into two.
 %% DISCUSSIONS
 \section{Discussion}
 
@@ -168,7 +179,7 @@ We observe 48 death events ($19.2\%$). At the end of the simulation surviving ce
 \begin{figure}[h]
 	\centering
 	\includegraphics[scale=0.5]{img/runningtime}
-	\caption{Running time in  for lattice size, $M =\{1,\ldots, 20\}$ and number of cells, $N=\frac{M^2}{25}$ for each simulation (average of three runs).}
+	\caption{Running time for lattice size, $M =\{1,\ldots, 20\}$ and number of cells, $N=\frac{M^2}{25}$ for each simulation (average of three runs).}
 	\label{runningtime}
 \end{figure}
 
@@ -181,34 +192,67 @@ We observe 48 death events ($19.2\%$). At the end of the simulation surviving ce
 
 \begin{figure}[h]
 	\centering
-	% \includegraphics[scale=0.20]{img/1ctc-start}
-	% \includegraphics[scale=0.20]{img/2vert-start}
-	% \includegraphics[scale=0.20]{img/2horz-start}
-	% \includegraphics[scale=0.20]{img/3ctc-start}
-	% \includegraphics[scale=0.20]{img/4ctc-start}
-	% \includegraphics[scale=0.20]{img/4ctc-d-start}
-	% \includegraphics[scale=0.20]{img/6ctc-start}
-	\caption{Starting positions of $1$-CTC, $2$-CTC (v), $2$-CTC (h), $3$-CTC, $4$-CTC (b), $4$-CTC (d) and $6$-CTCs respectively}
-	\label{race_start}
+	\includegraphics[scale=0.20]{img/1ctc_start}
+	\includegraphics[scale=0.20]{img/2ctc_start}
+	\includegraphics[scale=0.20]{img/3ctc_start}
+	\includegraphics[scale=0.20]{img/4ctc_start}
+	\includegraphics[scale=0.20]{img/5ctc_start}
+	\includegraphics[scale=0.20]{img/6ctc_start}
+	\includegraphics[scale=0.20]{img/7ctc_start}
+	\includegraphics[scale=0.20]{img/8ctc_start}
+	\includegraphics[scale=0.20]{img/9ctc_start}
+	\includegraphics[scale=0.20]{img/10ctc_start}
+	\caption{Starting positions of $k$-CTC for $11>k>0$.}
+	\label{racestart}
 \end{figure}
 
 \begin{table}[h]
 	\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|l|}
 	\hline
-	k                                                                             & 1     & 2     & 3     & 4     & 5     & 6     & 7     & 8     & 9     & 10    \\ \hline
-	Velocity $(\frac{10^-3}{MCS})$ & 21.49 & 23.88 & 25.80 & 25.50 & 24.70 & 25.38 & 25.22 & 24.08 & 25.06 & 25.01 \\ \hline
-	Splitting Frequency                                                           & N/A   & 0.2   & 0.06  & 0.02  & 0.03  & 0.00  & 0.01  & 0.01  & 0.02  & 0.01  \\ \hline
-	Survival Frequency                                                            & 1.00  & 1.00  & 1.00  & 1.00  & 1.00  & 1.00  & 1.00  & 1.00  & 1.00  & 1.00 \\ \hline
+	k                                         & 1     & 2     & 3     & 4     & 5     & 6     & 7     & 8     & 9     & 10    \\ \hline
+	Mean Velocity $(\frac{10^-3}{MCS})$ & 21.49 & 23.88 & 25.80 & 25.50 & 24.70 & 25.38 & 25.22 & 24.08 & 25.06 & 25.01 \\ \hline
+	Variance in velocity 							& 22.89		&	7.44	&	7.24	&	0.91	&	1.47	&	0.47	&	0.72	&	1.07	&	1.07	&	1.70 \\ \hline
+	Splitting Frequency              & N/A   & 0.2   & 0.06  & 0.02  & 0.03  & 0.00  & 0.01  & 0.01  & 0.02  & 0.01  \\ \hline
+	Survival             & 1.00  & 1.00  & 1.00  & 1.00  & 1.00  & 1.00  & 1.00  & 1.00  & 1.00  & 1.00 \\ \hline
 	\end{tabular}
-	\caption{Results from running $k$-CTCs experiencing a constant force for successive $k$s.}
+	\caption{Results from running $k$-CTCs experiencing a constant force for successive $k$.}
 	\label{racestats}
 \end{table}
 
-\newpage
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.40]{img/1ctc_heat}
+	\includegraphics[scale=0.40]{img/2ctc_heat}
+	\includegraphics[scale=0.40]{img/3ctc_heat}
+	\includegraphics[scale=0.40]{img/4ctc_heat}
+	\includegraphics[scale=0.40]{img/6ctc_heat}
+	\includegraphics[scale=0.40]{img/10ctc_heat}
+	\caption{Heatmaps for ending configurations of $k$-CTCs, $k\in\{1,2,3,4,6,10\}$. We can observe that $1$-CTCs and $2$-CTCs have a wider range of ending configurations while, $k=3,4,6,10$ move in more unison and have simillar ending configurations.}
+	\label{heatmap}
+\end{figure}
 
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.5]{img/forceapplied}
+	\caption{Representation of the force applied at each y-position of the lattice. A positive force represents and acceleration in the positive y direction}
+	\label{forceapplied}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.52]{img/nebula_0}
+	\includegraphics[scale=0.52]{img/nebula_5000}
+	\includegraphics[scale=0.52]{img/nebula_9000}
+	\includegraphics[scale=0.52]{img/nebula_13000}
+	\includegraphics[scale=0.52]{img/nebula_15000}
+	\includegraphics[scale=0.52]{img/nebula_17000}
+	\caption{Time series representing the splitting of a Tissue into two by using a discontinous force. (From left to right, top to bottom: $t=0,5000,9000, 13000, 15000,17000)$}
+	\label{nebula}
+\end{figure}
+
+\newpage
 \bibliographystyle{abbrv}
 \bibliography{396}
 
-\section{Appendix: Calculations}
 
 \end{document}
