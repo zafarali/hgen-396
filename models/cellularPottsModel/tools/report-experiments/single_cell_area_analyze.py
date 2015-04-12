@@ -24,6 +24,7 @@ fig1.hold()
 fig1.show()
 
 raw_input()
+print 'total cells:', len(allCells)
 print 'total died:', len(allCells)-len(nonZero)
 print 'mean non-zero cell area:', np.mean(nonZero)
 print 'variance in non-zero cell area:', np.var(nonZero)

@@ -40,7 +40,7 @@ def simulate():
 	global cellareas
 
 	x = CellularPottsModel( 10 , DEFAULT_ENERGY_FUNCTION , specialObjects = {})
-	x.initialize( 25 , **DEFAULT_INIT_PARAMETERS )
+	x.initialize( 1 , **DEFAULT_INIT_PARAMETERS )
 	x.runSimulation( 250 , **DEFAULT_SIMULATION_PARAMETERS )
 	
 	cellareas = cellareas + [cell.getArea() for cell in x.cellList if cell.getArea() > -1]

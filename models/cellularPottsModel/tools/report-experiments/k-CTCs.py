@@ -56,7 +56,7 @@ def simulate(N, i):
 	x.saveData('./experiments/'+str(N)+'_'+str(i))
 	# x.visualize(hold=True)
 
-for N in range(3, len(STARTING_POSITIONS)+1):
+for N in range(0, len(STARTING_POSITIONS)+1):
 	# SET THE STARTING POSITONS	
 	DEFAULT_INIT_PARAMETERS['pos'] = STARTING_POSITIONS[N-1]
 
@@ -65,6 +65,6 @@ for N in range(3, len(STARTING_POSITIONS)+1):
 	q.initialize ( len(DEFAULT_INIT_PARAMETERS['pos']) , **DEFAULT_INIT_PARAMETERS )
 	q.saveData( './experiments/BEFORE_' + str(N) )
 	del q
-	for i in range(0,30):
+	for i in range(0,10):
 		# RUN SIMULATIONS
 		simulate(N, i)
