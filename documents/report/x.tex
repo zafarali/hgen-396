@@ -97,13 +97,14 @@ Each \emph{spin copy attempt} of our simulation follows the algorithm outlined b
   \item Calculate $H_{final}$ using $\sigma_{trial}$
   \item Calcualte energy change, $\Delta H = H_{final} - H_{intial}$
   \item{ Change $\sigma_{select}$ to that of $\sigma_{trial}$ with the probability:
-  \[
+  \begin{equation}
  		P(\text{Spin Copy Attempt Successful}) =
   	\begin{cases}
    		1 & \text{if } \Delta H \leq 0 \\
    		\exp{(-\frac{\Delta H}{T})}       & \text{if } \Delta H > 0
   	\end{cases}
-	\]
+  	\label{p_attempt_success}
+	\end{equation}
 }
 \end{enumerate}
 
@@ -127,45 +128,53 @@ A Circulating Tumor Cell Cluster containing $k$ cells, $15>k>0$.
 
 The main focus of the project is to ensure that our model can make realistic predictions. Keeping this in mind experiments were set up to test the feasability of the model and to see if it solves trivial cases and conforms to intuition. To do this, we first determine the performance of our model to check if it completes in reasonable time frames and will allow us to run larger experiments in the future. 
 
-To check trivial cases, we run multiple single-spin cells to determine \emph{death frequency}. We expect that $15\%$ of cells will die within the first spin copy attempt. We run this experiment for $250$MCS to give cells time to expand (parameters: $a_{target}(\sigma(1))=20$ and $J(1,1)=1, J(1,0)=5$). From this data, \emph{death frequency} is measured and we can determine if cells grow to their $a_{target}$.
+To check trivial cases, we run multiple single-spin cells to determine \emph{death frequency}. Using Equation \ref{p_attempt_success} we expect that $15\%$ of cells will die within the first spin copy attempt. We run this experiment for $250$MCS to give cells time to expand (parameters: $a_{target}(\sigma(1))=20$ and $J(1,1)=1, J(1,0)=5$). From this data, \emph{death frequency} is measured and we can determine if cells grow to their $a_{target}$.
 
-$k$-CTCs for $k>0$ were subject to a constant force in a $100\times100$ lattice for $10000$MCS. The resulting end-state is used to measure \emph{velocity} of their migration and other characteristics such as \emph{splitting frequency} and \emph{survival}.
+To be able to compare the behaviours of $k$-CTCs relative to each other, $k$-CTCs for $k>0$ were subject to a constant force in a $100\times100$ lattice for $10000$MCS. The resulting end-state is used to measure \emph{velocity} of their migration and other characteristics such as \emph{splitting frequency} and \emph{survival}.
 
 Our final experiment attempted to separate a single tissue mass into two, in the presence of forces pulling on opposite ends of the lattice.
 
 %% RESULTS
 \section{Results}
 \subsection{The CPM Performs in Reasonable Time Frames}
-We ran the CPM for sizes $M=\{1, \ldots , 20\}$ with $N=\text{floor}(\frac{M^2}{25})$ cells for $t=500$MCS to allow simulate the worst case scenario of using every possible lattice position (parameters: $a_{target}(\sigma(1))=25$ and $J(1,1)=1, J(1,0)=5$). We take averages over three runs using the \%timeit function available in iPython.
+We ran the CPM for sizes $M\in\{1, \ldots , 40\}$ with $N=\text{floor}(\frac{M^2}{25})$ cells for $t=500$MCS to allow simulate the worst case scenario of using every possible lattice position (parameters: $a_{target}(\sigma(1))=25$ and $J(1,1)=1, J(1,0)=5$). We take averages over three runs using the \%timeit function available in iPython.
 
 Running time of the simulations showed an overall increasing trend (Figure \ref{runningtime}) as $M$ is increased. A $40\times40$ lattice with $64$ cells takes an average of $57.4$ seconds. This time is reasonable because if we extrapolate this trend, for simulations of $t=10,000$MCS, our simulations will complete on the order of $10$ minutes.
 
 \subsection{The CPM Solves Single Spin Cell Situations According to Expectations}
-When running single-spin cells in a lattice for $250$MCS, we observe 48 death events ($17.6\%$). The difference between expected death events and observed death events is $2.6\%$. The extra $2.6\%$ of cells that died can be accounted for by the cells that did not die within the first \emph{spin copy attempt}. This confirms our trust in the implementation of the the model.
+A lattice was set up with $a_{start}(\sigma)=1$ and results are taken from $273$ simulations. When running single-spin cells in a lattice for $250$MCS, we observe 48 death events ($17.6\%$). The difference between expected death events and observed death events is $2.6\%$. The extra $2.6\%$ of cells that died can be accounted for by the cells that did not die within the first \emph{spin copy attempt}. This confirms our trust in the implementation of the the model.
 
 At the end of the simulations, surviving cells had a mean area of $\mu = 17.99$ with a variance of $\sigma^2 = 6.39$ (Figure \ref{cellareas}). This is within $a_{target}(\sigma)=20$ and we can conclude that our area constraint works as expected. 
 
 By the design of our model, it is impossible for cells to spontaneously appear. This is our final expectation of the model.
 
 \subsection{Comparing $k$-CTCs for $10 \geq k\geq1$} %TODO%
-$k$-CTCs were set up in a $100\times100$ lattice as shown in Figure \ref{racestart}. Simulations were run for $10,000$MCS, $10$ times for each value of $k$. The results are summarized in Table \ref{racestats}. For $k>2$, Mean Velocity stabilized at $25.09\times10^-3\text{MCS}^{-1}$. For $k\leq3$, the mean velocity is lower. This can be explained by the fact that for $k\geq3$, $k$-CTCs tend to move in unison while for $k=\{1,2\}$ $k$-CTCs tend to split and move at more unpredictable directions. We plot heatmaps (Figure \ref{heatmap}) of the ending positions to confirm this reasoning. $1$ and $2$-CTCs tend to have a wider range of ending positions for their cells while $k\geq3$ tend to have simillar ending configurations.
+$k$-CTCs were set up in a $100\times100$ lattice as shown in Figure \ref{racestart}. Simulations were run for $10,000$MCS, $10$ times for each value of $k$. The results are summarized in Table \ref{racestats}. For $k>2$, Mean Velocity stabilized at $25.09\times10^{-3}\text{MCS}^{-1}$. For $k\leq3$, the mean velocity is lower. This can be explained by the fact that for $k\geq3$, $k$-CTCs tend to move in unison while for $k=\{1,2\}$ $k$-CTCs tend to split and move at more unpredictable directions. We plot heatmaps (Figure \ref{heatmap}) of the ending positions to confirm this reasoning. $1$ and $2$-CTCs tend to have a wider range of ending positions for their cells while $k\geq3$ tend to have simillar ending configurations.
 
-We also observe that the highest \emph{splitting frequency} is when $k=2$. When $k>3$ we see this splitting frequency drop very sharply. This suggests that larger $k$-CTCs do not tend to split as easily as their smaller counterparts. This makes sense because in larger $k$-CTCs, an escaping cell would need to break interactions with many more cells than just $1$ other cell like in the $k=2$ case.
+We also observe that the highest \emph{splitting frequency} is when $k=2$. When $k>3$ we see this splitting frequency drop very sharply. This suggests that larger $k$-CTCs do not tend to split as easily as their smaller counterparts. This makes sense because in larger $k$-CTCs, an escaping cell would need to break interactions with more cells than just one other cell like in the $k=2$ case.
+
+We observe that the \emph{survival frequency} for all $k$-CTCs is $100\%$. This seems quite odd, especially in the cases $k=1,2$. To verify the results of this metric, we ran $90$ more simulations for these two cases and obtained the \emph{survival frequency} to be $100\%$.
 
 \subsection{Tissues Can be Induced to Split in Two}
-A discontinous force (Figure \ref{forceapplied}) was applied to the lattice of $N=150$ cells as shown in Figure \ref{nebula} (Top left) in an attempt to split the mass of tissues into two. It took a total of $t=15000MCS$ for the tissues to begin splitting. The results of this experiment are summarized at increasing timesteps in Figure \ref{nebula}. It is clear that we infact can split tissues into two.
+A discontinous force (Figure \ref{forceapplied}) was applied to the lattice of $N=150$ cells as shown in Figure \ref{nebula} (Top left) in an attempt to split the mass of tissues into two. It took a total of $t=15000MCS$ for the tissues to begin splitting. The results of this experiment are summarized at increasing timesteps in Figure \ref{nebula}. It is clear that we can in fact split tissues into two.
 
-Qualitative observations reveal that, tissues split starting at the outer edges akin to pulling a piece of bubble gum. This is an important observation because it rules out the sudden appearance of the Extra Cellular Matrix within the tissue and is what is expected \emph{in vivo}.
+Qualitative observations reveal that tissues split starting at the outer edges akin to pulling a piece of bubble gum. This is an important observation because it rules out the sudden appearance of the Extra Cellular Matrix within the tissue and is what is expected \emph{in vivo}.
 %% DISCUSSIONS
 \section{Discussion}
+Circulating Tumor Cells, espcially clusters, are not well understood. Their rarity makes it difficult to study. Through this extensible model we have developed a way to make theoretical predictions about the nature of the formation of circulating tumor cells in the detachment stage. 
 
-\subsection{Model Feasibility}
-%% Is this model feasible to what we are trying to do?%
+The higher splitting frequency of $2$-CTCs relative to $k>2$ seems to suggest that, in blood samples of patients, $2$-CTCs will be isolated in lower numbers. In the formation of $k$-CTCs, we expect that $1$-CTCs and $2$-CTCs will form with higher probability for the same reason that the \emph{splitting frequency} for $k>2$ is low - the migrating cell needs to break more cell-cell adhesions than $k=1~\text{or}~2$. However, with our results, we expect $20\%$ of $2$-CTCs to split and add to the $1$-CTC population.
 
-\subsection{$k$-CTC Velocity is inversely proportional to $\sqrt{W}$ }
-% Simons conjecture %
+When applied with a constant force, the results of \emph{survival frequency} in Table \ref{racestats} imply that $k$-CTCs have a higher resistance to dying. This is an interesting observation, we would expect that for $k\leq4$, a certain number of cells will die. 
 
 \section{Conclusion}
+
+From the above discussion, we can conclude that this model is satisfactory at attempting to emulate $k$-CTC behaviour, however, the model is far from perfect. For example, in simulations of cells, we tend to find traces of cytoplasm dissociating from its main cell body or found within another cell. This is an artefact that can be fixed by tweaking the cell-cell adhesion terms. 
+
+Our next steps will be to introduce a \emph{mutation rate} to growing cells. This enables us to produce cancer cells after a certain number of Monte Carlo Time Steps.
+
+We would also like to be able to simulate cell divison in addition to cell growth. This will enable us to go from a tumors initial stages all the way to the production of a $k$-CTC. This will enable us to trace mutations and tumor heterogeneity as the tumor proliferates.
+
 
 
 \pagebreak
@@ -181,7 +190,7 @@ Qualitative observations reveal that, tissues split starting at the outer edges 
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.5]{img/runningtime}
-	\caption{Running time for lattice size, $M =\{1,\ldots, 20\}$ and number of cells, $N=\frac{M^2}{25}$ for each simulation (average of three runs).}
+	\caption{Running time for lattice size, $M =\{1,\ldots, 40\}$ and number of cells, $N=\frac{M^2}{25}$ for each simulation (average of three runs).}
 	\label{runningtime}
 \end{figure}
 
