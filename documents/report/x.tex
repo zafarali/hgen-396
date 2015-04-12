@@ -153,7 +153,9 @@ $k$-CTCs were set up in a $100\times100$ lattice as shown in Figure \ref{racesta
 We also observe that the highest \emph{splitting frequency} is when $k=2$. When $k>3$ we see this splitting frequency drop very sharply. This suggests that larger $k$-CTCs do not tend to split as easily as their smaller counterparts. This makes sense because in larger $k$-CTCs, an escaping cell would need to break interactions with many more cells than just $1$ other cell like in the $k=2$ case.
 
 \subsection{Tissues Can be Induced to Split in Two}
-A discontinous force (Figure \ref{forceapplied}) was applied to the lattice of $N=150$ cells as shown in Figure \ref{nebula} (Top left) in an attempt to split the mass of tissues into two. The results of this experiment are summarized at increasing timesteps in Figure \ref{nebula}. It is clear that we infact can split tissues into two.
+A discontinous force (Figure \ref{forceapplied}) was applied to the lattice of $N=150$ cells as shown in Figure \ref{nebula} (Top left) in an attempt to split the mass of tissues into two. It took a total of $t=15000MCS$ for the tissues to begin splitting. The results of this experiment are summarized at increasing timesteps in Figure \ref{nebula}. It is clear that we infact can split tissues into two.
+
+Qualitative observations reveal that, tissues split starting at the outer edges akin to pulling a piece of bubble gum. This is an important observation because it rules out the sudden appearance of the Extra Cellular Matrix within the tissue and is what is expected \emph{in vivo}.
 %% DISCUSSIONS
 \section{Discussion}
 
@@ -169,28 +171,30 @@ A discontinous force (Figure \ref{forceapplied}) was applied to the lattice of $
 \pagebreak
 \section{Tables and Figures}
 
-\begin{figure}[h]
+\begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.5]{img/basic}
 	\caption{An example of two cells in a lattice, each color represents a different cell $\sigma$. The grey area is the Extra Cellular Matrix}
 	\label{basic}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.5]{img/runningtime}
 	\caption{Running time for lattice size, $M =\{1,\ldots, 20\}$ and number of cells, $N=\frac{M^2}{25}$ for each simulation (average of three runs).}
 	\label{runningtime}
 \end{figure}
 
-\begin{figure}[h]
+\pagebreak
+
+\begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.5]{img/cellareas}
 	\caption{The distribution of final cell areas for $N=250$ simulations of a single-spin cell after $250$MCS. ($\mu = 17.99, \sigma^2=6.39$) }
 	\label{cellareas}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.20]{img/1ctc_start}
 	\includegraphics[scale=0.20]{img/2ctc_start}
@@ -206,7 +210,7 @@ A discontinous force (Figure \ref{forceapplied}) was applied to the lattice of $
 	\label{racestart}
 \end{figure}
 
-\begin{table}[h]
+\begin{table}[H]
 	\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|l|}
 	\hline
 	k                                         & 1     & 2     & 3     & 4     & 5     & 6     & 7     & 8     & 9     & 10    \\ \hline
@@ -218,8 +222,8 @@ A discontinous force (Figure \ref{forceapplied}) was applied to the lattice of $
 	\caption{Results from running $k$-CTCs experiencing a constant force for successive $k$.}
 	\label{racestats}
 \end{table}
-
-\begin{figure}[h]
+\pagebreak
+\begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.40]{img/1ctc_heat}
 	\includegraphics[scale=0.40]{img/2ctc_heat}
@@ -231,14 +235,14 @@ A discontinous force (Figure \ref{forceapplied}) was applied to the lattice of $
 	\label{heatmap}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.5]{img/forceapplied}
 	\caption{Representation of the force applied at each y-position of the lattice. A positive force represents and acceleration in the positive y direction}
 	\label{forceapplied}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.52]{img/nebula_0}
 	\includegraphics[scale=0.52]{img/nebula_5000}
