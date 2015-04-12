@@ -139,6 +139,7 @@ Running time of the simulations showed an overall increasing trend (Figure \ref{
 We observe 48 death events ($19.2\%$). At the end of the simulation surviving cells had a mean area of $\mu = 17.99$ with a variance of $\sigma^2 = 6.39$ (Figure \ref{cellareas}). %TODO%
 
 \subsection{Comparing $k$-CTCs for $k>0$ ...} %TODO%
+\ref{racestats}
 
 \subsection{Tissues Can be Induced to Split in Two}
 
@@ -180,16 +181,28 @@ We observe 48 death events ($19.2\%$). At the end of the simulation surviving ce
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[scale=0.20]{img/1ctc-start}
-	\includegraphics[scale=0.20]{img/2vert-start}
-	\includegraphics[scale=0.20]{img/2horz-start}
-	\includegraphics[scale=0.20]{img/3ctc-start}
-	\includegraphics[scale=0.20]{img/4ctc-start}
-	\includegraphics[scale=0.20]{img/4ctc-d-start}
-	\includegraphics[scale=0.20]{img/6ctc-start}
+	% \includegraphics[scale=0.20]{img/1ctc-start}
+	% \includegraphics[scale=0.20]{img/2vert-start}
+	% \includegraphics[scale=0.20]{img/2horz-start}
+	% \includegraphics[scale=0.20]{img/3ctc-start}
+	% \includegraphics[scale=0.20]{img/4ctc-start}
+	% \includegraphics[scale=0.20]{img/4ctc-d-start}
+	% \includegraphics[scale=0.20]{img/6ctc-start}
 	\caption{Starting positions of $1$-CTC, $2$-CTC (v), $2$-CTC (h), $3$-CTC, $4$-CTC (b), $4$-CTC (d) and $6$-CTCs respectively}
 	\label{race_start}
 \end{figure}
+
+\begin{table}[h]
+	\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|l|}
+	\hline
+	k                                                                             & 1     & 2     & 3     & 4     & 5     & 6     & 7     & 8     & 9     & 10    \\ \hline
+	Velocity $(\frac{10^-3}{MCS})$ & 21.49 & 23.88 & 25.80 & 25.50 & 24.70 & 25.38 & 25.22 & 24.08 & 25.06 & 25.01 \\ \hline
+	Splitting Frequency                                                           & N/A   & 0.2   & 0.06  & 0.02  & 0.03  & 0.00  & 0.01  & 0.01  & 0.02  & 0.01  \\ \hline
+	Survival Frequency                                                            & 1.00  & 1.00  & 1.00  & 1.00  & 1.00  & 1.00  & 1.00  & 1.00  & 1.00  & 1.00 \\ \hline
+	\end{tabular}
+	\caption{Results from running $k$-CTCs experiencing a constant force for successive $k$s.}
+	\label{racestats}
+\end{table}
 
 \newpage
 
