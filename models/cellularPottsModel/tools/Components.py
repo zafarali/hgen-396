@@ -54,15 +54,16 @@ def numberOfComponents( data, N ):
 			G[i][j] = 1
 			G[j][i] = 1
 
-	print G
 	# create a sparse graph
 	graph = sparse.csr_matrix(G)
 	# do connected components analysis
-	print sparse.csgraph.connected_components(graph, directed=False)
+	y,_ = sparse.csgraph.connected_components(graph, directed=False)
+	return y-1 if y > 1 else 0
 
 
 if __name__ == '__main__':
 	fileNames = sys.argv[1:]
+	total = 0
 	for fileName in fileNames:
 		data = []
 		with open(fileName, 'rb') as csvfile:
@@ -70,4 +71,5 @@ if __name__ == '__main__':
 			N = int(reader.next()[0])
 			for row in reader:
 				data.append(map(lambda x: int( float(x) ), row))
-		numberOfComponents( data, N )
+		total = total + numberOfComponents( data, N )
+		print total

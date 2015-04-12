@@ -4,14 +4,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import rc
 
-rc('text', usetex=True)
+# rc('text', usetex=True)
 
 
 def Visualizer( data, N, name ):
 	# NEW COLOR BAR
-	def discrete_cmap(N, base_cmap='jet'):
+	def discrete_cmap(N, base_cmap='prism'):
 		if N == 1:
-			return plt.cm.get_cmap('prism')
+			return plt.cm.get_cmap('jet')
 		base = plt.cm.get_cmap(base_cmap)
 		color_list = base(np.linspace(0,1,N+1))
 		color_list[0] = (.5,.5,.5,1.0)
