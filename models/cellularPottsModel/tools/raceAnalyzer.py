@@ -41,6 +41,7 @@ for fileName in fileNames:
 print 'total simulations=',len(fileNames)
 print	'cell survival rate:',1-(deadCells['count']/float(totalCells))
 print 'average max x=',np.mean(means)
+print 'variance in x= ',np.var(means)
 print 'dt=',8000
 print 'dx/dt=',(np.mean(means))/8000.0
 

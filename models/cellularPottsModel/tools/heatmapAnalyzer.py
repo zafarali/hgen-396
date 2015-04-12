@@ -11,7 +11,7 @@ def nonZeroToOne(data):
 		x,y = index
 		data[x][y] = 1
 
-fileNames = sys.argv[1:]
+fileNames = sys.argv[2:]
 
 lattici = []
 
@@ -33,7 +33,7 @@ for lattice in lattici:
 import matplotlib.pyplot as plt
 
 plt.imshow(HEATMAP)
-plt.title('Heatmap of finishing positions of 3-CTC races')
+plt.title('Heatmap of finishing positions of '+sys.argv[1]+'-CTC races')
 plt.xlabel('x positions')
 plt.ylabel('y positions')
 plt.show()
