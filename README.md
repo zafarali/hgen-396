@@ -2,3 +2,5 @@
 repository for code, learning scripts and projects for HGEN 396 project at McGill University
 
 [Comparison of Moore vs Von Neumann Neighbourhood (20MCS) in CPM Simulation](https://plot.ly/~iamzaf/135/comparison-of-moore-and-von-neumman-neighbourhood-strategies-in-simulation-of-ce/)
+
+Project Milestone: April 14th 2015 (submitted for HGEN396)
