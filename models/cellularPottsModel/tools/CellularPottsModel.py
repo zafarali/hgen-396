@@ -130,7 +130,7 @@ class CellularPottsModel(Lattice):
         mutationRate = kwargs.get('mutationRate' , 0)
         # lastSave = 0
         for i in range(0, MCS * self.size):
-            # thisMCS = int ( i / float(self.size) ) 
+            thisMCS = int ( i / float(self.size) ) 
             # if thisMCS % 1000 == 0 and thisMCS != lastSave:
             #     lastSave = thisMCS
             #     filename = self.name + '_' + str( thisMCS ) + 'MCS'
