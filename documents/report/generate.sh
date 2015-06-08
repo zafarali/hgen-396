@@ -1,6 +1,6 @@
 #!/bin/bash
 
-pdflatex x.tex
-bibtex x.aux
-pdflatex x.tex
-pdflatex x.tex
+pdflatex final.tex
+bibtex final.aux
+pdflatex final.tex
+pdflatex final.tex
