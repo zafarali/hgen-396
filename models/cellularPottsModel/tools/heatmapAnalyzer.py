@@ -5,6 +5,10 @@ from matplotlib import rc
 
 rc('text', usetex=True)
 
+"""
+Draws a heatmap of ending positions of the supplied lattices
+"""
+
 def nonZeroToOne(data):
 	indicies = zip(*np.nonzero(data))
 	for index in indicies:

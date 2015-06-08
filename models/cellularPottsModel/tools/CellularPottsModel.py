@@ -5,6 +5,12 @@ from Tools import Tools
 import matplotlib.pyplot as plt
 import numpy as np
 
+"""
+    Contains an implementation of the CPM and the metropolis algorithm
+    which allows evolution
+
+"""
+
 class CellularPottsModel(Lattice):
 
     CELL_AREA_DEFAULT = 20

@@ -1,6 +1,9 @@
 from Tools import Tools
 import numpy as np
 
+"""
+    Cell represents cells on the lattice
+"""
 
 class Cell:
     DEFAULT_INFORMATION = {

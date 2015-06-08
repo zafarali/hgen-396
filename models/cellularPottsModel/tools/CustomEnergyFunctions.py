@@ -1,6 +1,11 @@
 from Tools import Tools
 from Cell import Cell
 import numpy as np
+"""
+	A class of custom energy functions which allow us to
+	use area constraints and to interact with gradients
+"""
+
 
 class CustomEnergyFunctions:
 
@@ -28,11 +33,11 @@ class CustomEnergyFunctions:
 	@staticmethod
 	def xGradientInteract( cell1, options, gradientName = 'X-gradient' ):
 		# total = 0
-		return options['specialObjects'][gradientName].interactionAt(options['y'])
+		return -options['specialObjects'][gradientName].interactionAt(options['y'])
 
 	@staticmethod
 	def yGradientInteract( cell1, options, gradientName = 'Y-gradient' ):
-		return options['specialObjects'][gradientName].interactionAt(options['x'])
+		return -options['specialObjects'][gradientName].interactionAt(options['x'])
 	@staticmethod
 	def xyGradientInteract( cell1, options, gradientName = 'XY-gradient' ):
 		return options['specialObjects'][gradientName].interactionAt( options['x'], options['y'] )

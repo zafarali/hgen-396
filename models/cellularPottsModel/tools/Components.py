@@ -4,7 +4,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy import sparse
 from Tools import Tools
-
+"""
+	Counts the number of connected components in the Lattice
+"""
 def numberOfComponents( data, N ):
 	# create a matrix of zeros
 	# to store the graph

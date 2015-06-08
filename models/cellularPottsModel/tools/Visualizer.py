@@ -6,7 +6,9 @@ from matplotlib import rc
 
 # rc('text', usetex=True)
 
-
+"""
+	Visulaizes saved lattices
+"""
 def Visualizer( data, N, name ):
 	# NEW COLOR BAR
 	def discrete_cmap(N, base_cmap='prism'):

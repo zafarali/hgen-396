@@ -23,23 +23,23 @@ energies = {
 }
 
 specialFunctions = {
-	'OxygenGradientInteract': CustomEnergyFunctions.OxygenGradientInteract,
+	'X-gradient': CustomEnergyFunctions.xGradientInteract,
 	'AreaConstraint': CustomEnergyFunctions.AreaConstraint
 }
 
 import numpy as np
 gradients = {
-	'OxygenGradient': Gradient(lambda x: (27*x)**1 , 9, interactionStrength=1),
+	'X-gradient': Gradient(lambda x: (27*x)**1 , 9, interactionStrength=1),
 }
 gradients2 = {
-	'OxygenGradient': Gradient(lambda x: 0 , 9, interactionStrength=1),
+	'X-gradient': Gradient(lambda x: 0 , 9, interactionStrength=1),
 }
 efunc = EnergyFunction(energies, specialFunctions)
 
-x = CellularPottsModel(9, efunc, specialObjects=gradients)
-y = CellularPottsModel(9, efunc, specialObjects=gradients2)
-x.initialize(1, method='central', starterArea=1, name='c = +27')
-y.initialize(1, method='central', starterArea=1, name='control')
+x = CellularPottsModel(100, efunc, specialObjects=gradients)
+y = CellularPottsModel(100, efunc, specialObjects=gradients2)
+x.initialize(90, method='central', starterArea=1, name='c = +27')
+y.initialize(90, method='central', starterArea=1, name='control')
 
 x.saveData('testc-x')
 y.saveData('testc-control')
@@ -49,8 +49,8 @@ import matplotlib.mlab as mlab
 import matplotlib.pyplot as plt
 
 
-x.runSimulation(400, method='neumann', showVisualization=False)
-y.runSimulation(400, method='neumann', showVisualization=False)
+x.runSimulation(10000, method='neumann', showVisualization=False)
+y.runSimulation(10000, method='neumann', showVisualization=False)
 
 print 'simulations over'
 
@@ -58,13 +58,13 @@ x.visualize()
 y.visualize()
 
 fig1 = plt.figure('c+30 test')
-plt.plot(x.specialObjects['OxygenGradient'].interactions)
+plt.plot(x.specialObjects['X-gradient'].interactions)
 plt.title('c = +30 test')
 plt.xlabel('position')
 plt.ylabel('magnitude')
 
 fig2 = plt.figure('c control')
-plt.plot(y.specialObjects['OxygenGradient'].interactions)
+plt.plot(y.specialObjects['X-gradient'].interactions)
 plt.title('control')
 plt.xlabel('position')
 plt.ylabel('magnitude')

@@ -1,7 +1,5 @@
 __author__ = 'zafarali'
-#To change this template use Tools | Templates.
-#
-#
+# This script tests if the AREA Constraint is working correctly
 
 ## plotting stuff
 # import plotly.plotly as pltly
